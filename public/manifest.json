@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "ねこ検知",
+  "version": "1.2.1",
+  "description": "Webカメラで猫背を常時見守る拡張機能",
+  "action": {
+    "default_title": "ねこ検知",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "assets/background.js",
+    "type": "module"
+  },
+  "permissions": ["offscreen", "notifications"],
+  "icons": {
+    "128": "icons/icon-128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  },
+  "minimum_chrome_version": "116"
+}

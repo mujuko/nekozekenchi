@@ -8,6 +8,7 @@
     "dev": "vite",
     "dev:https": "node scripts/ensure-dev-cert.mjs && VITE_DEV_HTTPS=1 vite --host 0.0.0.0",
     "build": "tsc && vite build",
+    "build:extension": "tsc && vite build --config vite.extension.config.ts",
     "deploy:tagged": "node scripts/deploy-if-tagged.mjs",
     "test": "vitest run",
     "preview": "vite preview",
