@@ -49,6 +49,7 @@ elements.localeSelects.forEach((select) => {
     locale = nextLocale;
     t = getMessages(locale);
     localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
+    window.history.pushState(null, "", getLocalePath(nextLocale));
     updateAppLocale(APP_VERSION, elements, t, locale);
     sound.updateControls();
     postureWatcher.refreshLocale();
@@ -63,6 +64,21 @@ sound.loadSettings();
 displaySettings.loadSettings();
 
 function getInitialLocale(): Locale {
+  const pathLocale = getPathLocale();
+  if (pathLocale) return pathLocale;
+
   const savedLocale = localStorage.getItem(LOCALE_STORAGE_KEY);
   return isLocale(savedLocale) ? savedLocale : "ja";
+}
+
+function getPathLocale(): Locale | undefined {
+  const path = window.location.pathname.replace(/\/+$/, "");
+  if (path === "/en") return "en";
+  if (path === "") return "ja";
+
+  return undefined;
+}
+
+function getLocalePath(nextLocale: Locale) {
+  return nextLocale === "en" ? "/en/" : "/";
 }

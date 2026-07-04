@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index,follow" />
+    <meta
+      name="description"
+      content="A fully on-device web app that alerts you when you slouch. Camera video is never sent externally; posture detection runs only on your device."
+    />
+    <link rel="canonical" href="https://nekoze.mujuko.com/en/" />
+    <link rel="alternate" hreflang="ja" href="https://nekoze.mujuko.com/" />
+    <link rel="alternate" hreflang="en" href="https://nekoze.mujuko.com/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://nekoze.mujuko.com/" />
+    <meta name="theme-color" content="#f6f1e7" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nekokenchi" />
+    <meta property="og:title" content="Nekokenchi - Posture Watcher" />
+    <meta
+      property="og:description"
+      content="A fully on-device web app that alerts you when you slouch. Camera video is never sent externally; posture detection runs only on your device."
+    />
+    <meta property="og:url" content="https://nekoze.mujuko.com/en/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Nekokenchi - Posture Watcher" />
+    <meta
+      name="twitter:description"
+      content="A fully on-device web app that alerts you when you slouch. Camera video is never sent externally; posture detection runs only on your device."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Nekokenchi",
+        "alternateName": "ねこ検知",
+        "url": "https://nekoze.mujuko.com/en/",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Web",
+        "description": "A fully on-device web app that alerts you when you slouch. Camera video is never sent externally; posture detection runs only on your device.",
+        "inLanguage": ["en", "ja"],
+        "isAccessibleForFree": true,
+        "softwareHelp": "https://github.com/mujuko/nekokenchi"
+      }
+    </script>
+    <title>Nekokenchi - Posture Watcher</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>
+      <main>
+        <h1>Nekokenchi - Posture Watcher</h1>
+        <p>
+          Nekokenchi watches your posture with your camera and plays a sound
+          when you keep slouching. Camera video is never sent externally;
+          posture detection runs only on your device.
+        </p>
+      </main>
+    </noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
