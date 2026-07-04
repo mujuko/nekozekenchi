@@ -3,14 +3,55 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index,follow" />
     <meta
       name="description"
-      content="カメラで姿勢を見守り、猫背が続くと音で知らせるプライバシー重視のWebアプリ"
+      content="猫背を音で知らせる完全オンデバイスなWebアプリ。映像は外部に送信せず、端末内だけで姿勢を判定します。"
     />
+    <link rel="canonical" href="https://nekoze.mujuko.com/" />
+    <meta name="theme-color" content="#f6f1e7" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ねこ検知" />
+    <meta property="og:title" content="ねこ検知 - 猫背みまもり" />
+    <meta
+      property="og:description"
+      content="猫背を音で知らせる完全オンデバイスなWebアプリ。映像は外部に送信せず、端末内だけで姿勢を判定します。"
+    />
+    <meta property="og:url" content="https://nekoze.mujuko.com/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="ねこ検知 - 猫背みまもり" />
+    <meta
+      name="twitter:description"
+      content="猫背を音で知らせる完全オンデバイスなWebアプリ。映像は外部に送信せず、端末内だけで姿勢を判定します。"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "ねこ検知",
+        "alternateName": "Nekokenchi",
+        "url": "https://nekoze.mujuko.com/",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Web",
+        "description": "猫背を音で知らせる完全オンデバイスなWebアプリ。映像は外部に送信せず、端末内だけで姿勢を判定します。",
+        "inLanguage": ["ja", "en"],
+        "isAccessibleForFree": true,
+        "softwareHelp": "https://github.com/mujuko/nekokenchi"
+      }
+    </script>
     <title>ねこ検知 - 猫背みまもり</title>
   </head>
   <body>
     <div id="app"></div>
+    <noscript>
+      <main>
+        <h1>ねこ検知 - 猫背みまもり</h1>
+        <p>
+          ねこ検知は、カメラで姿勢を見守り、猫背が続いたときに音で知らせる
+          Webアプリです。カメラ映像は送信されず、端末内だけで姿勢を判定します。
+        </p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
