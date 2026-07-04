@@ -185,6 +185,7 @@ export function updateAppLocale(
   document
     .querySelector('meta[name="description"]')
     ?.setAttribute("content", t.meta.description);
+  updateHeadLocale(t, locale);
 
   setText(".brand .brand-mark + span", t.common.brand);
   document
@@ -361,6 +362,42 @@ function updateSelectOption(select: HTMLSelectElement, value: string, text: stri
     `option[value="${value}"]`,
   );
   if (option) option.textContent = text;
+}
+
+function updateHeadLocale(t: Messages, locale: Locale) {
+  const url = locale === "en" ? "https://nekoze.mujuko.com/en/" : "https://nekoze.mujuko.com/";
+  const alternateName = locale === "en" ? "ねこ検知" : "Nekokenchi";
+
+  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.setAttribute("href", url);
+  setMetaContent('meta[property="og:site_name"]', t.common.brand);
+  setMetaContent('meta[property="og:title"]', t.meta.title);
+  setMetaContent('meta[property="og:description"]', t.meta.description);
+  setMetaContent('meta[property="og:url"]', url);
+  setMetaContent('meta[name="twitter:title"]', t.meta.title);
+  setMetaContent('meta[name="twitter:description"]', t.meta.description);
+
+  const schema = document.querySelector<HTMLScriptElement>(
+    'script[type="application/ld+json"]',
+  );
+  if (schema) {
+    schema.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: t.common.brand,
+      alternateName,
+      url,
+      applicationCategory: "HealthApplication",
+      operatingSystem: "Web",
+      description: t.meta.description,
+      inLanguage: locale === "en" ? ["en", "ja"] : ["ja", "en"],
+      isAccessibleForFree: true,
+      softwareHelp: "https://github.com/mujuko/nekokenchi",
+    });
+  }
+}
+
+function setMetaContent(selector: string, content: string) {
+  document.querySelector<HTMLMetaElement>(selector)?.setAttribute("content", content);
 }
 
 function query<T extends Element>(selector: string): T {

@@ -15,7 +15,7 @@ export const messages = {
     meta: {
       title: "ねこ検知 - 猫背みまもり",
       description:
-        "カメラ映像を送信せず、端末内で姿勢を判定して猫背が続くと音で知らせるWebアプリ",
+        "猫背を音で知らせる完全オンデバイスなWebアプリ。映像は外部に送信せず、端末内だけで姿勢を判定します。",
     },
     common: {
       brand: "ねこ検知",
@@ -139,7 +139,7 @@ export const messages = {
     meta: {
       title: "Nekokenchi - Posture Watcher",
       description:
-        "A posture app that keeps camera video on your device and nudges you when you start slouching.",
+        "A fully on-device web app that alerts you when you slouch. Camera video is never sent externally; posture detection runs only on your device.",
     },
     common: {
       brand: "Nekokenchi",
