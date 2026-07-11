@@ -1,18 +1,46 @@
 # ねこ検知
 
-Webカメラと MediaPipe Pose Landmarker を使い、頭の高さの変化から猫背を見守るWebアプリです。
+[English](README.en.md)
 
-## 起動
+WebカメラとMediaPipe Pose Landmarkerを使い、頭の高さの変化から猫背を検知するWebアプリです。
+
+カメラ映像と姿勢ランドマークは端末内で処理され、サーバーには送信しません。
+
+## 利用者向け
+
+### 使い方
+
+1. カメラを、顔と肩が正面から映る距離・目線に近い高さに置きます。
+2. カメラを起動し、良い姿勢を3秒間記録します。
+3. 続けて、猫背の姿勢を3秒間記録します。
+4. 設定した感度以上の猫背が一定時間続くと通知されます。
+
+判定を安定させるため、極端に見下ろす・見上げる画角は避けてください。
+
+### 判定の仕組み
+
+キャリブレーションで記録した「良い姿勢」と「猫背」の頭の高さを基準に、現在の鼻のY座標が猫背側へどの程度近づいたかをスコア化します。通知後も猫背が続く場合は、12秒の間隔を空けて再通知します。姿勢が回復すると、このクールダウンは解除されます。
+
+## 開発者向け
+
+### 必要なもの
+
+- Node.js
+- npm
+- LAN内の別端末からHTTPSで確認する場合のみ `mkcert`
+
+### 開発サーバーを起動する
 
 ```bash
 npm install
 npm run dev
 ```
 
-開発サーバーは `http://localhost:5187` で起動します。
+`http://localhost:5187` をブラウザで開きます。
 
-別端末やスマホからLAN経由でカメラを使う場合は、HTTPSで起動してください。初回だけ
-`mkcert` が必要です。
+### LAN内の端末からHTTPSで確認する
+
+スマートフォンなど、同一LAN内の別端末のブラウザでカメラを使うにはHTTPSでアクセスする必要があります。初回のみ `mkcert` をセットアップします。
 
 ```bash
 brew install mkcert
@@ -20,104 +48,96 @@ mkcert -install
 npm run dev:https
 ```
 
-起動ログに表示される `https://<IPアドレス>:5187` を端末側のブラウザで開きます。
-IPアドレスが変わった場合は、次回起動時に `.cert` の開発用証明書を作り直します。
+起動ログに表示される `https://<IPアドレス>:5187` を端末側で開きます。IPアドレスが変わった場合は、次回起動時に `.cert` の開発用証明書が作り直されます。
 
-カメラ映像と姿勢ランドマークは端末内で処理され、サーバーには送信しません。
-
-## ライセンス
-
-このプロジェクト本体は MIT License です。
-
-同梱している MediaPipe Tasks Vision の WASM ファイルと Pose Landmarker Lite モデルは
-Apache License 2.0 で提供されています。第三者ライセンス表記は
-`public/THIRD_PARTY_NOTICES.txt` を参照してください。
-
-同梱している通知音の一部は [ポケットサウンド](https://pocket-se.info/) の効果音素材です。
-利用規約に基づき、アプリ内と第三者ライセンス表記にクレジットリンクを掲載しています。
-
-## プロダクションビルド
+### テスト・ビルド・プレビュー
 
 ```bash
+npm test
 npm run build
 npm run preview
 ```
 
-プレビューは `http://localhost:5188` で起動します。
+プレビューは `http://localhost:5188` で起動します。同一LAN内の別端末からアクセスする場合は `npm run preview:https` を使います。
 
-LAN経由でプレビューする場合は `npm run preview:https` を使ってください。
+生成された `dist/index.html` をブラウザで直接開いても、ブラウザのセキュリティ制約によりカメラを利用できません。カメラを使う場合は、開発サーバーまたはプレビューサーバーを起動してください。
 
-`dist/index.html` は直接開いても画面を確認できますが、ブラウザのセキュリティ制約により
-`file://` ではカメラを利用できません。カメラを使う場合は `npm run dev` または
-`npm run preview` で表示される localhost のURLを開いてください。
+## デプロイ
 
-## デプロイとリリース
+アプリをCloudflare Pagesで公開するため、GitHub ActionsでCloudflare Workersにデプロイします。
 
-Cloudflare Workers の `dev` / `production` 環境に静的アセットを配る前提です。
-要件を満たすため、公開先とトリガーを次のように分けます。
-
-| 環境 | Worker | デプロイトリガー | 公開範囲 |
+| 環境 | Worker名 | 自動デプロイが実行される条件 | 公開範囲 |
 | --- | --- | --- | --- |
-| 開発環境 | `nekokenchi-dev` | `main` ブランチへの push | Cloudflare Access で認証を必須化 |
-| 本番環境 | `nekokenchi` | `v*` タグへの push | 誰でもアクセス可能 |
+| 開発環境 | `nekokenchi-dev` | `main` ブランチが更新されたら | Cloudflare Accessで認証された人のみ |
+| 本番環境 | `nekokenchi` | `v*` タグがpushされたら | 誰でも |
 
-GitHub Actions は `main` に入ったコミットをすべて開発環境へリアルタイムにデプロイし、
-`v*` タグが付いたコミットだけを本番環境へデプロイします。
-GitHub Secrets には `CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` を設定してください。
+リポジトリに次のSecretsを設定する必要があります。
 
-開発環境だけ認証を掛けるため、Cloudflare Zero Trust の Access Application を
-`nekokenchi-dev` 用ホスト名に作成します。例として、対象ドメインを
-`dev.nekokenchi.example.com` または `nekokenchi-dev.<subdomain>.workers.dev` にし、
-許可するユーザー・メールドメイン・IdP グループだけを Allow ポリシーに登録します。
-本番環境の `nekokenchi` 用ホスト名には Access Application を作らない、または既存ポリシーを
-紐づけないことで誰でも使える状態にします。
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
 
-手動で開発環境へ配る場合は、ビルド後に `deploy:dev` を実行します。
-`wrangler versions upload` はバージョンを作るだけで、そのバージョンを配信中のデプロイにはしないため、
-開発環境・本番環境とも実際に公開するコマンドは `wrangler deploy` を使います。
+開発環境を非公開にするため、Cloudflare Zero Trustで `nekokenchi-dev` のホスト名を対象とするAccess ApplicationとAllowポリシーを作成します。
+
+### 手動デプロイ
+
+開発環境へデプロイする場合：
 
 ```bash
 npm run build
 npm run deploy:dev
 ```
 
-本番環境へ手動で配る場合は、タグが付いたコミットだけを即時デプロイする
-`deploy:prod` を使います。タグが付いていない HEAD では正常終了し、デプロイはスキップされます。
+本番環境へデプロイする場合：
 
 ```bash
 npm run build
 npm run deploy:prod
 ```
 
-バージョン番号は Git タグから取得して画面上部に表示します。main ブランチを PR 経由でしか
-更新できない場合も、ブランチ保護は外さず、バージョン更新とタグ作成を分けます。
+`deploy:prod` は、現在のコミットに `package.json` のバージョンと一致する `v*` タグが付いている場合だけデプロイします。タグがなければ正常終了してスキップし、タグとバージョンが一致しなければ失敗します。
 
-1. リリース用 PR で `npm version --no-git-tag-version` を使い、`package.json` と
-   `package-lock.json` だけを更新します。
-2. PR を main にマージします。この時点ではタグなしコミットなので、開発環境だけに配られます。
-3. main のマージ後コミットに、`package.json` のバージョンと一致する `v*` タグを作成して push します。
-   タグ push により本番環境へ配られます。
+実際に配信状態を更新する必要があるため、デプロイにはバージョンのアップロードだけを行う `wrangler versions upload` ではなく `wrangler deploy` を使用しています。
 
-一連の手順を自動実行するコマンド：
+## リリース
+
+`main` ブランチが保護されている（PR経由でのみ更新可能）前提です。
+
+### リリースの流れ
+
+1. リリースブランチで `package.json` と `package-lock.json` のバージョンを更新します。
+2. リリースブランチを push し、PRを作成します。
+3. PRを `main` にマージします。この時点で開発環境に自動デプロイされます。
+4. 開発環境で動作確認をします。
+5. マージ後の `main` のコミットに、バージョンと一致する `v*` タグを付けてpushします。
+6. タグのpushを契機に、本番環境へ自動デプロイされます。
+
+### 1. リリースブランチを準備する
+
+通常は次のコマンドを使います。 `release/v1.0.2` のようなブランチの作成、コミット、pushまでを自動実行します。
+
 ```bash
 npm run pre-release
 ```
 
-`minor` / `major` の場合は引数で指定します。ブランチ名とコミットメッセージは
-更新後のバージョン番号から自動で `release/v1.0.2` / `chore: release v1.0.2` のように作られます。
+デフォルトではpatchバージョンが更新されます。minorまたはmajorバージョンを更新する場合：
 
 ```bash
 npm run pre-release -- minor
 npm run pre-release -- major
 ```
 
-実行前に予定されるバージョンとブランチ名だけ確認したい場合は dry run できます。
+変更せずに次のバージョンとブランチ名だけを確認する場合：
 
 ```bash
 npm run pre-release -- --dry-run
 ```
 
-手動で実行する場合：
+`pre-release` は PRの作成、PRのマージ、タグの作成は行いません。push後にリリースPRを作成し、 `main` へマージしてください。
+
+#### 手動で準備する場合
+
+次のバージョンが `1.0.2` の例です。
+
 ```bash
 git switch -c release/v1.0.2 origin/main
 npm version patch --no-git-tag-version
@@ -126,7 +146,11 @@ git commit -m "chore: release v1.0.2"
 git push origin release/v1.0.2
 ```
 
-PR マージ後、main の最新コミットにタグを付けます。
+minorまたはmajorバージョンでは、 `patch` を `minor` または `major` に置き換えます。
+
+### 2. マージ後のコミットをタグ付けする
+
+リリースPRをマージしたら、`main` を最新にしてタグを作成します。タグは `package.json` のバージョンと一致させてください。
 
 ```bash
 git switch main
@@ -135,18 +159,12 @@ git tag v1.0.2
 git push origin v1.0.2
 ```
 
-`minor` や `major` を切る場合は `npm version minor --no-git-tag-version` /
-`npm version major --no-git-tag-version` を使います。`deploy:prod` は
-`package.json` の `version` と一致する `v*` タグが HEAD にある場合だけ本番環境へデプロイします。
-そのため、タグ名と `package.json` のバージョンがずれたリリースは失敗します。
+タグをpushするとGitHub Actionsが本番デプロイを開始します。タグ名と `package.json` のバージョンが一致しない場合、本番デプロイは拒否されます。
 
-## 判定方法
+## ライセンス
 
-1. カメラ起動後、良い姿勢の頭の高さを3秒間キャリブレーション
-2. 続けて猫背の頭の高さを3秒間キャリブレーション
-3. 現在の鼻のY座標が猫背側にどれくらい近づいたかをスコア化
-4. 設定した感度以上に猫背へ近づいた状態が一定時間続くと通知
-5. 通知後は12秒間のクールダウン
+このプロジェクトはMIT Licenseです。また、以下の第三者リソースを使用しています。詳細は `public/THIRD_PARTY_NOTICES.txt` を参照してください。
 
-カメラは顔と肩が正面から映る距離で、目線に近い高さに置くと判定しやすくなります。
-極端な見下ろしや見上げの画角は避けてください。
+- 同梱しているMediaPipe Tasks VisionのWASMファイルとPose Landmarker LiteモデルはApache License 2.0で提供されています。
+- 同梱している通知音の一部（猫の鳴き声）は [ポケットサウンド](https://pocket-se.info/) の効果音素材です。利用規約に基づき、アプリ内と第三者ライセンス表記にクレジットリンクを掲載しています。
+- UIの一部は、 [デジタル庁デザインシステム](https://design.digital.go.jp/dads/) のHTMLコードスニペットを参考に実装しています。コードスニペットはMIT Licenseで提供されています。
