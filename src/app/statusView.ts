@@ -21,6 +21,9 @@ export function createStatusView(elements: AppElements, getMessages: MessagesPro
     elements.postureBadges.forEach((element) => {
       element.className = `posture-badge ${status}`;
       element.textContent = text;
+      const card = element.closest<HTMLElement>(".metric-card");
+      card?.classList.remove("idle", "missing", "good", "bad", "paused");
+      card?.classList.add(status);
     });
   }
 
@@ -55,16 +58,18 @@ export function createStatusView(elements: AppElements, getMessages: MessagesPro
         remaining > 0 ? t.posture.badCountdown(remaining) : t.posture.badBadge,
       );
       elements.statusLabel.textContent = t.posture.badStatus;
-      elements.statusPill.className = "status-pill warning";
+      elements.statusPill.className = "status-pill bad";
     } else if (status === "missing") {
       setPostureBadge(status, t.posture.missingBadge);
       elements.statusLabel.textContent = t.camera.lookingForPerson;
+      elements.statusPill.className = "status-pill missing";
     } else if (status === "paused") {
       setPostureBadge(status, t.posture.pausedBadge);
       elements.statusLabel.textContent = t.camera.statusPaused;
       elements.statusPill.className = "status-pill paused";
     } else {
       setPostureBadge(status, t.posture.idleBadge);
+      elements.statusPill.className = "status-pill";
     }
   }
 

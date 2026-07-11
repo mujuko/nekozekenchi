@@ -30,18 +30,17 @@ export const messages = {
     header: {
       homeLabel: "ねこ検知 ホーム",
       versionLabel: (version: string) => `バージョン ${version}`,
-      privacy: "映像は端末内だけで処理",
       openMenu: "メニューを開く",
       closeMenu: "メニューを閉じる",
     },
     hero: {
       titleLine1: "背すじが丸まったら、",
       titleEmphasis: "そっとお知らせ。",
-      copy: "カメラで頭の高さを見守り、猫背が続いたときだけ音で知らせます。まずは正面から、目線に近い高さで映してください。",
+      copy: "カメラで頭の高さを見守り、猫背を見つけたら音で知らせます。まずは正面から、目線に近い高さで映してください。",
     },
     camera: {
       placeholderTitle: "カメラを起動しましょう",
-      placeholderCopy: "姿勢の判定はこの端末内で行われます",
+      placeholderCopy: "映像は端末内だけで処理されます",
       start: "起動",
       stop: "停止",
       recalibrate: "再調整",
@@ -154,18 +153,17 @@ export const messages = {
     header: {
       homeLabel: "Nekokenchi home",
       versionLabel: (version: string) => `Version ${version}`,
-      privacy: "Video never leaves your device",
       openMenu: "Open menu",
       closeMenu: "Close menu",
     },
     hero: {
       titleLine1: "Stay upright",
       titleEmphasis: "with a gentle nudge.",
-      copy: "Nekokenchi tracks head height on your device and nudges you only when slouching continues. Face the camera near eye level to start.",
+      copy: "Nekokenchi tracks your head height and plays a sound when it detects slouching. Face the camera near eye level to start.",
     },
     camera: {
       placeholderTitle: "Start the camera",
-      placeholderCopy: "Everything runs on this device",
+      placeholderCopy: "Video is processed only on this device",
       start: "Start",
       stop: "Stop",
       recalibrate: "Calibrate",
