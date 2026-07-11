@@ -9,17 +9,16 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
             <span class="ear ear-left"></span><span class="ear ear-right"></span>
             <span class="face-dot face-dot-left"></span><span class="face-dot face-dot-right"></span>
           </span>
-          <span>${t.common.brand}</span>
+          <span class="brand-name">${t.common.brand}</span>
           <span class="brand-version" aria-label="${t.header.versionLabel(appVersion)}">${appVersion}</span>
         </a>
         <div class="topbar-actions desktop-only">
           ${languageSelect(t, locale, "desktop")}
           <a class="github-button" href="https://github.com/mujuko/nekokenchi" target="_blank" rel="noreferrer" aria-label="${t.common.github}" title="${t.common.github}">
-            ${githubIcon()}
+            ${githubIcon()}<span>${t.common.sourceCode}</span>
           </a>
-          <div class="privacy"><span class="privacy-dot"></span>${t.header.privacy}</div>
         </div>
-        <button class="menu-button mobile-only" id="menu-button" type="button" aria-label="${t.header.openMenu}" aria-controls="mobile-menu" aria-expanded="false">
+        <button class="menu-button dads-hamburger-menu-button mobile-only" id="menu-button" type="button" aria-label="${t.header.openMenu}" aria-controls="mobile-menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </header>
@@ -55,14 +54,14 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
             <div class="alert-flash" id="alert-flash" hidden>${t.camera.alert}</div>
           </div>
           <div class="camera-actions">
-            <button class="button primary" id="start-button">
+            <button class="button primary dads-button" data-type="solid-fill" data-size="lg" id="start-button">
               <svg class="button-icon camera-icon" aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M14.5 4.5 16.2 7H20a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3.8l1.7-2.5h5Z"></path>
                 <circle cx="12" cy="13" r="4"></circle>
               </svg>
               <span id="start-button-label">${t.camera.start}</span>
             </button>
-            <button class="button secondary" id="pause-button" type="button" disabled>
+            <button class="button secondary dads-button" data-type="outline" data-size="lg" id="pause-button" type="button" disabled>
               <svg class="button-icon" id="pause-button-pause-icon" aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M8 5v14"></path>
                 <path d="M16 5v14"></path>
@@ -72,7 +71,7 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
               </svg>
               <span id="pause-button-label">${t.camera.pause}</span>
             </button>
-            <button class="button secondary" id="calibrate-button" disabled>
+            <button class="button secondary dads-button" data-type="outline" data-size="lg" id="calibrate-button" disabled>
               <svg class="button-icon" aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"></path>
                 <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"></path>
@@ -88,7 +87,7 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
             <div>
               <h2>${t.settings.menuTitle}</h2>
             </div>
-            <button class="close-button" id="close-menu-button" type="button" aria-label="${t.header.closeMenu}">×</button>
+            <button class="close-button dads-button" data-type="text" data-size="sm" id="close-menu-button" type="button" aria-label="${t.header.closeMenu}">×</button>
           </div>
           <div class="mobile-only">${languageSelect(t, locale, "mobile")}</div>
           ${settingsPanel()}
@@ -127,7 +126,7 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
         <h2>${t.settings.panelTitle}</h2>
         <label class="setting-row">
           <span><b>${t.settings.sensitivity}</b><small>${t.settings.sensitivityHelp}</small></span>
-          <select id="sensitivity">
+          <select class="dads-select" id="sensitivity">
             <option value="0.9">${t.settings.sensitivityLoose}</option>
             <option value="0.75" selected>${t.settings.sensitivityNormal}</option>
             <option value="0.6">${t.settings.sensitivitySensitive}</option>
@@ -135,7 +134,7 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
         </label>
         <label class="setting-row">
           <span><b>${t.settings.duration}</b><small>${t.settings.durationHelp}</small></span>
-          <select id="duration">
+          <select class="dads-select" id="duration">
             <option value="2000">${t.settings.seconds(2)}</option>
             <option value="3000" selected>${t.settings.seconds(3)}</option>
             <option value="5000">${t.settings.seconds(5)}</option>
@@ -161,10 +160,10 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
               <label><input type="checkbox" value="cat30" data-sound-choice>${t.settings.soundCat(4)}</label>
             </div>
             <div class="sound-volume">
-              <button class="sound-button mute-button" id="mute-button" type="button" aria-pressed="false" aria-label="${t.settings.muteLabel}">${t.settings.mute}</button>
+              <button class="sound-button mute-button dads-button" data-type="outline" data-size="sm" id="mute-button" type="button" aria-pressed="false" aria-label="${t.settings.muteLabel}">${t.settings.mute}</button>
               <input id="sound-volume" type="range" min="0" max="100" step="5" value="50" aria-label="${t.settings.volumeLabel}">
             </div>
-            <button class="sound-button sound-test-button" id="sound-button" type="button" aria-label="${t.settings.testSoundLabel}">${t.settings.testSound}</button>
+            <button class="sound-button sound-test-button dads-button" data-type="outline" data-size="sm" id="sound-button" type="button" aria-label="${t.settings.testSoundLabel}">${t.settings.testSound}</button>
           </div>
         </div>
       </div>
@@ -194,16 +193,11 @@ export function updateAppLocale(
   document
     .querySelector(".brand-version")
     ?.setAttribute("aria-label", t.header.versionLabel(appVersion));
-  const privacy = document.querySelector(".privacy");
-  if (privacy) {
-    const dot = document.createElement("span");
-    dot.className = "privacy-dot";
-    privacy.replaceChildren(dot, t.header.privacy);
-  }
   document
     .querySelector(".github-button")
     ?.setAttribute("aria-label", t.common.github);
   document.querySelector(".github-button")?.setAttribute("title", t.common.github);
+  setText(".github-button span", t.common.sourceCode);
   elements.menuButton?.setAttribute("aria-label", t.header.openMenu);
 
   document.querySelectorAll<HTMLSelectElement>("[data-locale-select]").forEach((select) => {
