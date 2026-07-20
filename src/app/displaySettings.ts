@@ -1,6 +1,6 @@
 import type { AppElements } from "../ui";
 
-const DISPLAY_SETTINGS_KEY = "nekokenchi:display-settings";
+const DISPLAY_SETTINGS_KEY = "nekozekenchi:display-settings";
 
 export type DisplaySettings = {
   video: boolean;

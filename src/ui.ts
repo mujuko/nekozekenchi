@@ -14,7 +14,7 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
         </a>
         <div class="topbar-actions desktop-only">
           ${languageSelect(t, locale, "desktop")}
-          <a class="github-button" href="https://github.com/mujuko/nekokenchi" target="_blank" rel="noreferrer" aria-label="${t.common.github}" title="${t.common.github}">
+          <a class="github-button" href="https://github.com/mujuko/nekozekenchi" target="_blank" rel="noreferrer" aria-label="${t.common.github}" title="${t.common.github}">
             ${githubIcon()}<span>${t.common.sourceCode}</span>
           </a>
         </div>
@@ -96,7 +96,7 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
             <p><b>${t.tip.title}</b>${t.tip.body}</p>
           </div>
           <nav class="menu-links mobile-only" aria-label="${t.common.brand}">
-            <a href="https://github.com/mujuko/nekokenchi" target="_blank" rel="noreferrer">${githubIcon()}<span>${t.common.sourceCode}</span></a>
+            <a href="https://github.com/mujuko/nekozekenchi" target="_blank" rel="noreferrer">${githubIcon()}<span>${t.common.sourceCode}</span></a>
             <a href="https://pocket-se.info/" target="_blank" rel="noreferrer">${t.common.soundCredit}</a>
             <span>${t.common.copyright}</span>
           </nav>
@@ -360,7 +360,7 @@ function updateSelectOption(select: HTMLSelectElement, value: string, text: stri
 
 function updateHeadLocale(t: Messages, locale: Locale) {
   const url = locale === "en" ? "https://nekoze.mujuko.com/en/" : "https://nekoze.mujuko.com/";
-  const alternateName = locale === "en" ? "ねこ検知" : "Nekokenchi";
+  const alternateName = locale === "en" ? "ねこ背検知" : "Nekozekenchi";
 
   document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.setAttribute("href", url);
   setMetaContent('meta[property="og:site_name"]', t.common.brand);
@@ -385,7 +385,7 @@ function updateHeadLocale(t: Messages, locale: Locale) {
       description: t.meta.description,
       inLanguage: locale === "en" ? ["en", "ja"] : ["ja", "en"],
       isAccessibleForFree: true,
-      softwareHelp: "https://github.com/mujuko/nekokenchi",
+      softwareHelp: "https://github.com/mujuko/nekozekenchi",
     });
   }
 }

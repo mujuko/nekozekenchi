@@ -1,8 +1,8 @@
-# Neko Kenchi
+# Nekozekenchi
 
 [日本語](README.md)
 
-Neko Kenchi is a web app that uses your webcam and MediaPipe Pose Landmarker to detect slouching based on changes in head position.
+Nekozekenchi is a web app that uses your webcam and MediaPipe Pose Landmarker to detect slouching based on changes in head position.
 
 Camera footage and pose landmarks are processed entirely on your device and are never sent to a server.
 
@@ -68,15 +68,15 @@ The app is published through Cloudflare Pages by deploying to Cloudflare Workers
 
 | Environment | Worker | Automatic deployment trigger | Access |
 | --- | --- | --- | --- |
-| Development | `nekokenchi-dev` | The `main` branch is updated | Restricted by Cloudflare Access |
-| Production | `nekokenchi` | A `v*` tag is pushed | Public |
+| Development | `nekozekenchi-dev` | The `main` branch is updated | Restricted by Cloudflare Access |
+| Production | `nekozekenchi` | A `v*` tag is pushed | Public |
 
 Configure the following repository secrets:
 
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
 
-To keep the development environment private, create a Cloudflare Zero Trust Access Application and an Allow policy for the `nekokenchi-dev` hostname.
+To keep the development environment private, create a Cloudflare Zero Trust Access Application and an Allow policy for the `nekozekenchi-dev` hostname.
 
 ### Manual deployment
 

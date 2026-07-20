@@ -1,4 +1,4 @@
-# ねこ検知
+# ねこ背検知
 
 [English](README.en.md)
 
@@ -68,15 +68,15 @@ npm run preview
 
 | 環境 | Worker名 | 自動デプロイが実行される条件 | 公開範囲 |
 | --- | --- | --- | --- |
-| 開発環境 | `nekokenchi-dev` | `main` ブランチが更新されたら | Cloudflare Accessで認証された人のみ |
-| 本番環境 | `nekokenchi` | `v*` タグがpushされたら | 誰でも |
+| 開発環境 | `nekozekenchi-dev` | `main` ブランチが更新されたら | Cloudflare Accessで認証された人のみ |
+| 本番環境 | `nekozekenchi` | `v*` タグがpushされたら | 誰でも |
 
 リポジトリに次のSecretsを設定する必要があります。
 
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
 
-開発環境を非公開にするため、Cloudflare Zero Trustで `nekokenchi-dev` のホスト名を対象とするAccess ApplicationとAllowポリシーを作成します。
+開発環境を非公開にするため、Cloudflare Zero Trustで `nekozekenchi-dev` のホスト名を対象とするAccess ApplicationとAllowポリシーを作成します。
 
 ### 手動デプロイ
 

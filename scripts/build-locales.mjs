@@ -8,30 +8,30 @@ const enIndexPath = resolve(rootDir, "dist/en/index.html");
 
 const ja = {
   lang: "ja",
-  title: "ねこ検知 - 猫背みまもり",
-  siteName: "ねこ検知",
+  title: "ねこ背検知 - 猫背みまもり",
+  siteName: "ねこ背検知",
   url: "https://nekoze.mujuko.com/",
   description:
     "猫背を音で知らせる完全オンデバイスなWebアプリ。映像は外部に送信せず、端末内だけで姿勢を判定します。",
-  schemaName: "ねこ検知",
-  schemaAlternateName: "Nekokenchi",
-  noscriptTitle: "ねこ検知 - 猫背みまもり",
+  schemaName: "ねこ背検知",
+  schemaAlternateName: "Nekozekenchi",
+  noscriptTitle: "ねこ背検知 - 猫背みまもり",
   noscriptBody:
-    "ねこ検知は、カメラで姿勢を見守り、猫背が続いたときに音で知らせるWebアプリです。カメラ映像は送信されず、端末内だけで姿勢を判定します。",
+    "ねこ背検知は、カメラで姿勢を見守り、猫背が続いたときに音で知らせるWebアプリです。カメラ映像は送信されず、端末内だけで姿勢を判定します。",
 };
 
 const en = {
   lang: "en",
-  title: "Nekokenchi - Posture Watcher",
-  siteName: "Nekokenchi",
+  title: "Nekozekenchi - Posture Watcher",
+  siteName: "Nekozekenchi",
   url: "https://nekoze.mujuko.com/en/",
   description:
     "A fully on-device web app that alerts you when you slouch. Camera video is never sent externally; posture detection runs only on your device.",
-  schemaName: "Nekokenchi",
-  schemaAlternateName: "ねこ検知",
-  noscriptTitle: "Nekokenchi - Posture Watcher",
+  schemaName: "Nekozekenchi",
+  schemaAlternateName: "ねこ背検知",
+  noscriptTitle: "Nekozekenchi - Posture Watcher",
   noscriptBody:
-    "Nekokenchi watches your posture with your camera and plays a sound when you keep slouching. Camera video is never sent externally; posture detection runs only on your device.",
+    "Nekozekenchi watches your posture with your camera and plays a sound when you keep slouching. Camera video is never sent externally; posture detection runs only on your device.",
 };
 
 let html = await readFile(distIndexPath, "utf8");
@@ -76,7 +76,7 @@ function replaceSchema(html, from, to) {
         "description": "${to.description}",
         "inLanguage": ["${to.lang}", "${from.lang}"],
         "isAccessibleForFree": true,
-        "softwareHelp": "https://github.com/mujuko/nekokenchi"
+        "softwareHelp": "https://github.com/mujuko/nekozekenchi"
       }
     </script>`,
   );
