@@ -1,4 +1,4 @@
-export const LOCALE_STORAGE_KEY = "nekokenchi:locale";
+export const LOCALE_STORAGE_KEY = "nekozekenchi:locale";
 
 export type Locale = "ja" | "en";
 
@@ -13,12 +13,12 @@ export type Messages = Widen<(typeof messages)["ja"]>;
 export const messages = {
   ja: {
     meta: {
-      title: "ねこ検知 - 猫背みまもり",
+      title: "ねこ背検知 - 猫背みまもり",
       description:
         "猫背を音で知らせる完全オンデバイスなWebアプリ。映像は外部に送信せず、端末内だけで姿勢を判定します。",
     },
     common: {
-      brand: "ねこ検知",
+      brand: "ねこ背検知",
       copyright: "© 第一無重工",
       github: "GitHub",
       sourceCode: "ソースを見る",
@@ -28,7 +28,7 @@ export const messages = {
       english: "English",
     },
     header: {
-      homeLabel: "ねこ検知 ホーム",
+      homeLabel: "ねこ背検知 ホーム",
       versionLabel: (version: string) => `バージョン ${version}`,
       openMenu: "メニューを開く",
       closeMenu: "メニューを閉じる",
@@ -127,7 +127,7 @@ export const messages = {
       body: "顔と肩が正面から映る距離で、極端な見下ろしや見上げの画角を避けると安定します。",
     },
     notification: {
-      title: "ねこ検知",
+      title: "ねこ背検知",
       body: "背すじが丸まっています。姿勢を戻しましょう。",
     },
     model: {
@@ -136,12 +136,12 @@ export const messages = {
   },
   en: {
     meta: {
-      title: "Nekokenchi - Posture Watcher",
+      title: "Nekozekenchi - Posture Watcher",
       description:
         "A fully on-device web app that alerts you when you slouch. Camera video is never sent externally; posture detection runs only on your device.",
     },
     common: {
-      brand: "Nekokenchi",
+      brand: "Nekozekenchi",
       copyright: "© Mark I Weightless Industries",
       github: "GitHub",
       sourceCode: "View source",
@@ -151,7 +151,7 @@ export const messages = {
       english: "English",
     },
     header: {
-      homeLabel: "Nekokenchi home",
+      homeLabel: "Nekozekenchi home",
       versionLabel: (version: string) => `Version ${version}`,
       openMenu: "Open menu",
       closeMenu: "Close menu",
@@ -159,7 +159,7 @@ export const messages = {
     hero: {
       titleLine1: "Stay upright",
       titleEmphasis: "with a gentle nudge.",
-      copy: "Nekokenchi tracks your head height and plays a sound when it detects slouching. Face the camera near eye level to start.",
+      copy: "Nekozekenchi tracks your head height and plays a sound when it detects slouching. Face the camera near eye level to start.",
     },
     camera: {
       placeholderTitle: "Start the camera",
@@ -250,7 +250,7 @@ export const messages = {
       body: "For steadier detection, keep your face and shoulders in view and avoid steep camera angles.",
     },
     notification: {
-      title: "Nekokenchi",
+      title: "Nekozekenchi",
       body: "You are starting to slouch. Sit up when you can.",
     },
     model: {

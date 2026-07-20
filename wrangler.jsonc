@@ -1,18 +1,18 @@
 {
-  "name": "nekokenchi",
+  "name": "nekozekenchi",
   "compatibility_date": "2026-06-16",
   "assets": {
     "directory": "./dist"
   },
   "env": {
     "dev": {
-      "name": "nekokenchi-dev",
+      "name": "nekozekenchi-dev",
       "assets": {
         "directory": "./dist"
       }
     },
     "production": {
-      "name": "nekokenchi",
+      "name": "nekozekenchi",
       "assets": {
         "directory": "./dist"
       }

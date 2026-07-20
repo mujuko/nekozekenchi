@@ -1,10 +1,10 @@
 import type { AppElements } from "../ui";
 import type { Messages } from "../i18n";
 
-const SOUND_VOLUME_KEY = "nekokenchi:sound-volume";
-const SOUND_MUTED_KEY = "nekokenchi:sound-muted";
-const SOUND_LAST_AUDIBLE_VOLUME_KEY = "nekokenchi:sound-last-audible-volume";
-const SOUND_CHOICES_KEY = "nekokenchi:sound-choices";
+const SOUND_VOLUME_KEY = "nekozekenchi:sound-volume";
+const SOUND_MUTED_KEY = "nekozekenchi:sound-muted";
+const SOUND_LAST_AUDIBLE_VOLUME_KEY = "nekozekenchi:sound-last-audible-volume";
+const SOUND_CHOICES_KEY = "nekozekenchi:sound-choices";
 const DEFAULT_SOUND_VOLUME = 50;
 const BASE_ALERT_GAIN = 0.22;
 const MAX_ALERT_GAIN = 1;
