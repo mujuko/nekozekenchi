@@ -92,7 +92,7 @@ export const messages = {
     },
     gesture: {
       guide:
-        "ジェスチャー: T字で一時停止／ピースで再開／パーで停止／合掌で再調整／口元に人差し指でミュート／サムズアップで解除",
+        "一時停止：両手でT字⌚／再開：ピース✌️／停止：パー✋／再調整：合掌🙏／ミュート：人差し指を口元🤫／ミュート解除：サムズアップ👍",
       hold: (gesture: string) => `${gesture}を認識中…そのまま保持`,
       pause: "タイム（T字）",
       resume: "ピース",
@@ -232,7 +232,7 @@ export const messages = {
     },
     gesture: {
       guide:
-        "Gestures: T sign to pause · Victory sign to resume · Open palm to stop · Prayer hands to recalibrate · Finger to lips to mute · Thumbs up to unmute",
+        "Pause: T sign⌚ · Resume: Victory sign✌️ · Stop: Open palm✋ · Recalibrate: Prayer hands🙏 · Mute: Finger to lips🤫 · Unmute: Thumbs up👍",
       hold: (gesture: string) => `Recognizing ${gesture}… keep holding`,
       pause: "T sign",
       resume: "Victory sign",
