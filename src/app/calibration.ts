@@ -31,7 +31,7 @@ export function createCalibrationController(
     elements.calibrationHelp.textContent = t.calibration.goodHelp;
     elements.countdown.textContent = "3";
     elements.statusLabel.textContent = t.calibration.status;
-    elements.statusPill.className = "status-pill calibrating";
+    elements.statusPill.className = "status-pill status-pill--calibrating";
     onCalibrated({ goodY: null, badY: null, badSince: null, lastAlertAt: null });
   }
 

@@ -50,7 +50,7 @@ export function createDisplaySettingsController(elements: AppElements) {
   }
 
   function applyVideoVisibility() {
-    elements.video.classList.toggle("display-hidden", !settings.video);
+    elements.video.classList.toggle("camera__video--hidden", !settings.video);
   }
 
   return { bindControls, getSettings, loadSettings };
