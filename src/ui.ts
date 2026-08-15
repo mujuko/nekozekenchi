@@ -51,6 +51,10 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
             <div class="status-pill" id="status-pill" hidden>
               <span></span><b id="status-label">${t.camera.statusMeasuring}</b>
             </div>
+            <div class="gesture-feedback" id="gesture-feedback" role="status" hidden>
+              <b id="gesture-feedback-label"></b>
+              <span class="gesture-progress"><i id="gesture-progress-bar"></i></span>
+            </div>
             ${posturePanel()}
             <div class="alert-flash" id="alert-flash" hidden>${t.camera.alert}</div>
           </div>
@@ -80,6 +84,7 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
               <span id="calibrate-button-label">${t.camera.recalibrate}</span>
             </button>
           </div>
+          <p class="gesture-guide" id="gesture-guide">${t.gesture.guide}</p>
         </div>
 
         <div class="menu-scrim mobile-only" id="menu-scrim" hidden></div>
@@ -236,6 +241,7 @@ export function updateAppLocale(
   elements.pauseButtonLabel.textContent = t.camera.pause;
   elements.calibrateButtonLabel.textContent = t.camera.recalibrate;
   elements.alertFlash.textContent = t.camera.alert;
+  elements.gestureGuide.textContent = t.gesture.guide;
 
   elements.mobileMenu.setAttribute("aria-label", t.settings.panelAria);
   setText(".drawer-head h2", t.settings.menuTitle);
@@ -329,6 +335,10 @@ export function getAppElements() {
     calibrateButtonLabel: query<HTMLSpanElement>("#calibrate-button-label"),
     statusPill: query<HTMLDivElement>("#status-pill"),
     statusLabel: query<HTMLElement>("#status-label"),
+    gestureFeedback: query<HTMLDivElement>("#gesture-feedback"),
+    gestureFeedbackLabel: query<HTMLElement>("#gesture-feedback-label"),
+    gestureProgressBar: query<HTMLElement>("#gesture-progress-bar"),
+    gestureGuide: query<HTMLParagraphElement>("#gesture-guide"),
     catIcons: queryAll<HTMLImageElement>("[data-cat-icon]"),
     postureBadges: queryAll<HTMLDivElement>("[data-posture-badge]"),
     meterFills: queryAll<HTMLDivElement>("[data-meter-fill]"),

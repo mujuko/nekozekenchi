@@ -11,6 +11,11 @@ import { createCalibrationController } from "./calibration";
 import { createDesktopNotifier } from "./desktopNotification";
 import { createOverlay } from "./overlay";
 import {
+  createGestureHoldController,
+  detectGestureCommand,
+  type GestureCommand,
+} from "./gesture";
+import {
   createLandmarker,
   type PoseInferenceClient,
 } from "./poseLandmarker";
@@ -28,6 +33,8 @@ export function createPostureWatcher(
   getMessages: MessagesProvider,
 ) {
   const BACKGROUND_PREDICTION_INTERVAL_MS = 125;
+  const GESTURE_PREDICTION_INTERVAL_MS = 125;
+  const GESTURE_COMPLETE_DISPLAY_MS = 1800;
 
   let poseLandmarker: PoseInferenceClient | null = null;
   let stream: MediaStream | null = null;
@@ -36,6 +43,9 @@ export function createPostureWatcher(
   let lastVideoTime = -1;
   let predicting = false;
   let predictionEpoch = 0;
+  let lastGesturePredictionAt = Number.NEGATIVE_INFINITY;
+  let gestureFeedbackUntil = 0;
+  let gestureFeedbackTimer = 0;
   let paused = false;
   let postureState: PostureState = createEmptyPostureState();
 
@@ -45,6 +55,7 @@ export function createPostureWatcher(
     displaySettings.getSettings,
   );
   const desktopNotifier = createDesktopNotifier(getMessages);
+  const gestureHold = createGestureHoldController();
   const calibration = createCalibrationController(
     elements,
     (state) => {
@@ -113,6 +124,9 @@ export function createPostureWatcher(
     elements.statusPill.hidden = true;
     elements.calibrationOverlay.hidden = true;
     calibration.reset();
+    gestureHold.reset();
+    lastGesturePredictionAt = Number.NEGATIVE_INFINITY;
+    clearGestureFeedback(true);
     paused = false;
     elements.pauseButton.disabled = true;
     updatePauseButton(false);
@@ -143,6 +157,7 @@ export function createPostureWatcher(
     updatePauseButton(true);
     elements.calibrateButton.disabled = true;
     statusView.updateStatus("paused", 0, 0);
+    scheduleNextPrediction();
   }
 
   function resumeDetection() {
@@ -175,7 +190,7 @@ export function createPostureWatcher(
     cancelAnimationFrame(animationFrame);
     window.clearTimeout(backgroundTimer);
 
-    if (document.hidden) {
+    if (document.hidden || paused) {
       backgroundTimer = window.setTimeout(
         predict,
         BACKGROUND_PREDICTION_INTERVAL_MS,
@@ -187,7 +202,7 @@ export function createPostureWatcher(
   }
 
   function predict() {
-    if (!poseLandmarker || !stream || paused) return;
+    if (!poseLandmarker || !stream) return;
     const landmarker = poseLandmarker;
     if (predicting) {
       scheduleNextPrediction();
@@ -199,9 +214,24 @@ export function createPostureWatcher(
       lastVideoTime = elements.video.currentTime;
       predicting = true;
       const epoch = predictionEpoch;
+      const recognizeGestures =
+        now - lastGesturePredictionAt >= GESTURE_PREDICTION_INTERVAL_MS;
+      if (recognizeGestures) lastGesturePredictionAt = now;
       void createImageBitmap(elements.video)
-        .then((frame) => landmarker.detectForVideo(frame, now))
-        .then((landmarks) => {
+        .then((frame) =>
+          landmarker.detectForVideo(frame, now, recognizeGestures),
+        )
+        .then((inferenceResult) => {
+          if (!stream || epoch !== predictionEpoch) {
+            overlay.clear();
+            return;
+          }
+
+          const landmarks = inferenceResult.poseLandmarks;
+          if (recognizeGestures) {
+            handleGestureFrame(landmarks, inferenceResult.hands, now);
+          }
+
           if (!stream || paused || epoch !== predictionEpoch) {
             overlay.clear();
             return;
@@ -248,17 +278,125 @@ export function createPostureWatcher(
         })
         .catch((error) => {
           if (epoch === predictionEpoch) {
-            console.error("Pose inference failed.", error);
+            console.error("Inference failed.", error);
           }
         })
         .finally(() => {
           predicting = false;
-          if (stream && !paused) scheduleNextPrediction();
+          if (stream) scheduleNextPrediction();
         });
       return;
     }
 
     scheduleNextPrediction();
+  }
+
+  function handleGestureFrame(
+    landmarks: Parameters<typeof detectGestureCommand>[0],
+    hands: Parameters<typeof detectGestureCommand>[1],
+    now: number,
+  ) {
+    let observed = detectGestureCommand(landmarks, hands);
+    if (
+      calibration.isCalibrating() &&
+      observed !== "stop" &&
+      observed !== "mute" &&
+      observed !== "unmute"
+    ) {
+      observed = null;
+    }
+    if (observed === "pause" && paused) observed = null;
+    if (observed === "resume" && !paused) observed = null;
+    if (observed === "mute" && sound.isMuted()) observed = null;
+    if (observed === "unmute" && !sound.isMuted()) observed = null;
+
+    const holdResult = gestureHold.update(observed, now);
+    if (holdResult.started) {
+      void sound.playGestureRecognized();
+    }
+    if (holdResult.triggered) {
+      executeGestureCommand(holdResult.triggered, now);
+      return;
+    }
+    if (holdResult.candidate) {
+      showGestureCandidate(holdResult.candidate, holdResult.progress);
+      return;
+    }
+    clearGestureFeedback(false, now);
+  }
+
+  function executeGestureCommand(command: GestureCommand, now: number) {
+    const t = getMessages();
+
+    if (command === "unmute") {
+      sound.unmute();
+      void sound.playGestureConfirmed();
+      showGestureComplete(t.gesture.unmuted, now);
+      return;
+    }
+
+    if (command === "stop") {
+      void sound.playGestureConfirmed("shutdown");
+      stopCamera();
+      showGestureComplete(t.gesture.stopped, now);
+      return;
+    }
+
+    void sound.playGestureConfirmed();
+    if (command === "pause") {
+      pauseDetection();
+      showGestureComplete(t.gesture.paused, now);
+      return;
+    }
+    if (command === "resume") {
+      resumeDetection();
+      showGestureComplete(t.gesture.resumed, now);
+      return;
+    }
+    if (command === "recalibrate") {
+      beginCalibration();
+      showGestureComplete(t.gesture.recalibrating, now);
+      return;
+    }
+
+    if (command === "mute") {
+      sound.mute();
+      showGestureComplete(t.gesture.muted, now);
+      return;
+    }
+  }
+
+  function showGestureCandidate(command: GestureCommand, progress: number) {
+    const t = getMessages();
+    const gestureName = t.gesture[command];
+    window.clearTimeout(gestureFeedbackTimer);
+    gestureFeedbackUntil = 0;
+    elements.gestureFeedback.hidden = false;
+    elements.gestureFeedback.classList.remove("complete");
+    elements.gestureFeedbackLabel.textContent = t.gesture.hold(gestureName);
+    elements.gestureProgressBar.style.width = `${Math.round(progress * 100)}%`;
+  }
+
+  function showGestureComplete(message: string, now: number) {
+    window.clearTimeout(gestureFeedbackTimer);
+    gestureFeedbackUntil = now + GESTURE_COMPLETE_DISPLAY_MS;
+    elements.gestureFeedback.hidden = false;
+    elements.gestureFeedback.classList.add("complete");
+    elements.gestureFeedbackLabel.textContent = message;
+    elements.gestureProgressBar.style.width = "100%";
+    gestureFeedbackTimer = window.setTimeout(() => {
+      clearGestureFeedback(true);
+    }, GESTURE_COMPLETE_DISPLAY_MS);
+  }
+
+  function clearGestureFeedback(force: boolean, now = performance.now()) {
+    if (!force && now < gestureFeedbackUntil) return;
+    window.clearTimeout(gestureFeedbackTimer);
+    gestureFeedbackTimer = 0;
+    gestureFeedbackUntil = 0;
+    elements.gestureFeedback.hidden = true;
+    elements.gestureFeedback.classList.remove("complete");
+    elements.gestureProgressBar.style.width = "0";
   }
 
   function showStartupError(message: string) {
@@ -309,7 +447,7 @@ export function createPostureWatcher(
 
   window.addEventListener("resize", overlay.resizeCanvas);
   document.addEventListener("visibilitychange", () => {
-    if (!stream || paused) return;
+    if (!stream) return;
     scheduleNextPrediction();
   });
 

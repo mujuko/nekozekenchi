@@ -50,9 +50,9 @@ export const messages = {
       statusMeasuring: "計測中",
       alert: "背すじを伸ばそう",
       waitingPermission: "カメラの許可を待っています...",
-      loadingModel: "姿勢モデルを読込中...",
+      loadingModel: "推論モデルを読込中...",
       loadingModelMessage:
-        "初回だけ姿勢モデルを読み込みます。しばらくお待ちください。",
+        "初回だけ姿勢とジェスチャーのモデルを読み込みます。しばらくお待ちください。",
       retry: "もう一度試す",
       startupError: "起動エラー",
       localHostRequired: "localhost で起動してください",
@@ -89,6 +89,23 @@ export const messages = {
       badStatus: "姿勢が低下",
       missingBadge: "検出待ち",
       pausedBadge: "一時停止中",
+    },
+    gesture: {
+      guide:
+        "ジェスチャー: T字で一時停止／ピースで再開／パーで停止／合掌で再調整／口元に人差し指でミュート／サムズアップで解除",
+      hold: (gesture: string) => `${gesture}を認識中…そのまま保持`,
+      pause: "タイム（T字）",
+      resume: "ピース",
+      stop: "バイバイ（パー）",
+      recalibrate: "合掌",
+      mute: "人差し指を口元",
+      unmute: "サムズアップ",
+      paused: "ジェスチャーで一時停止しました",
+      resumed: "ジェスチャーで再開しました",
+      stopped: "ジェスチャーで停止しました",
+      recalibrating: "ジェスチャーで再調整を開始します",
+      muted: "ジェスチャーでミュートしました",
+      unmuted: "ジェスチャーでミュートを解除しました",
     },
     settings: {
       menuTitle: "設定",
@@ -131,7 +148,7 @@ export const messages = {
       body: "背すじが丸まっています。姿勢を戻しましょう。",
     },
     model: {
-      timeout: "姿勢モデルの読み込みがタイムアウトしました。",
+      timeout: "推論モデルの読み込みがタイムアウトしました。",
     },
   },
   en: {
@@ -173,9 +190,9 @@ export const messages = {
       statusMeasuring: "Measuring",
       alert: "Sit up straight",
       waitingPermission: "Waiting for camera access...",
-      loadingModel: "Loading posture model...",
+      loadingModel: "Loading inference models...",
       loadingModelMessage:
-        "This may take a moment the first time.",
+        "Loading the posture and gesture models may take a moment the first time.",
       retry: "Try again",
       startupError: "Startup error",
       localHostRequired: "Open from localhost",
@@ -212,6 +229,23 @@ export const messages = {
       badStatus: "Slouching",
       missingBadge: "No pose",
       pausedBadge: "Paused",
+    },
+    gesture: {
+      guide:
+        "Gestures: T sign to pause · Victory sign to resume · Open palm to stop · Prayer hands to recalibrate · Finger to lips to mute · Thumbs up to unmute",
+      hold: (gesture: string) => `Recognizing ${gesture}… keep holding`,
+      pause: "T sign",
+      resume: "Victory sign",
+      stop: "Bye-bye (open palm)",
+      recalibrate: "Prayer hands",
+      mute: "Finger to lips",
+      unmute: "Thumbs up",
+      paused: "Paused by gesture",
+      resumed: "Resumed by gesture",
+      stopped: "Stopped by gesture",
+      recalibrating: "Starting recalibration by gesture",
+      muted: "Muted by gesture",
+      unmuted: "Unmuted by gesture",
     },
     settings: {
       menuTitle: "Settings",
@@ -254,7 +288,7 @@ export const messages = {
       body: "You are starting to slouch. Sit up when you can.",
     },
     model: {
-      timeout: "Posture model loading timed out.",
+      timeout: "Inference model loading timed out.",
     },
   },
 } as const;

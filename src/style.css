@@ -338,6 +338,7 @@ video.display-hidden { opacity: 0; }
 .camera-placeholder[hidden],
 .calibration-overlay[hidden],
 .status-pill[hidden],
+.gesture-feedback[hidden],
 .alert-flash[hidden] { display: none; }
 
 .camera-placeholder h2 { margin: 24px 0 8px; font-size: 20px; line-height: 1.5; }
@@ -352,6 +353,8 @@ video.display-hidden { opacity: 0; }
   gap: 12px;
   padding-top: 16px;
 }
+
+.gesture-guide { margin: 10px 4px 0; color: var(--color-neutral-600); font-size: 13px; line-height: 1.6; }
 
 .dads-button,
 .button {
@@ -408,6 +411,12 @@ video.display-hidden { opacity: 0; }
 .status-pill.calibrating span { background: #fff; animation: pulse 1s ease infinite; }
 .status-pill.paused span { background: #b3b3b3; }
 @keyframes pulse { 50% { opacity: .35; } }
+
+.gesture-feedback { position: absolute; top: 16px; left: 50%; z-index: 4; display: grid; width: min(320px, calc(100% - 160px)); gap: 7px; padding: 9px 12px; color: #fff; background: rgb(26 26 26 / 92%); border: 1px solid #aaa; border-radius: 4px; font-size: 14px; text-align: center; transform: translateX(-50%); }
+.gesture-feedback.complete { color: var(--ink); background: var(--color-success-bg); border-color: var(--color-success); }
+.gesture-progress { height: 4px; overflow: hidden; background: rgb(255 255 255 / 25%); border-radius: 2px; }
+.gesture-progress i { display: block; width: 0; height: 100%; background: var(--color-brand-bright); transition: width .12s linear; }
+.gesture-feedback.complete .gesture-progress { display: none; }
 
 .alert-flash { position: absolute; left: 50%; bottom: 84px; z-index: 3; max-width: calc(100% - 32px); padding: 12px 20px; color: var(--ink); background: var(--color-error-bg); border: 2px solid var(--color-error); border-radius: 4px; font-size: 16px; font-weight: 700; opacity: 0; transform: translate(-50%, 8px); transition: .2s ease; }
 .alert-flash.show { opacity: 1; transform: translate(-50%, 0); }
@@ -488,6 +497,8 @@ video.display-hidden { opacity: 0; }
   .camera-card { min-height: calc(100dvh - 88px); padding: 8px; border-radius: 8px; }
   .camera-stage { height: auto; border-radius: 6px; }
   .camera-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding-top: 8px; }
+  .gesture-guide { margin-top: 8px; font-size: 12px; }
+  .gesture-feedback { top: 54px; width: calc(100% - 24px); }
   .button { min-width: 0; min-height: 48px; padding: 6px 8px; font-size: 14px; white-space: nowrap; }
   .button-icon { width: 18px; height: 18px; }
   .camera-placeholder h2 { margin-top: 20px; font-size: 18px; }
