@@ -6,20 +6,20 @@ export type CatMood = "relaxed" | "triggered";
 
 export function renderApp(appVersion: string, t: Messages, locale: Locale) {
   return `
-    <main class="app-shell">
-      <header class="topbar">
+    <main class="app">
+      <header class="app-header">
         <a class="brand" href="#" aria-label="${t.header.homeLabel}">
-          <img class="brand-mark" data-cat-icon src="${catRelaxedUrl}" alt="">
-          <span class="brand-name">${t.common.brand}</span>
-          <span class="brand-version" aria-label="${t.header.versionLabel(appVersion)}">${appVersion}</span>
+          <img class="brand__mark" data-cat-icon src="${catRelaxedUrl}" alt="">
+          <span class="brand__name">${t.common.brand}</span>
+          <span class="brand__version" aria-label="${t.header.versionLabel(appVersion)}">${appVersion}</span>
         </a>
-        <div class="topbar-actions desktop-only">
+        <div class="app-header__actions desktop-only">
           ${languageSelect(t, locale, "desktop")}
-          <a class="github-button" href="https://github.com/mujuko/nekozekenchi" target="_blank" rel="noreferrer" aria-label="${t.common.github}" title="${t.common.github}">
+          <a class="source-link" href="https://github.com/mujuko/nekozekenchi" target="_blank" rel="noreferrer" aria-label="${t.common.github}" title="${t.common.github}">
             ${githubIcon()}<span>${t.common.sourceCode}</span>
           </a>
         </div>
-        <button class="menu-button dads-hamburger-menu-button mobile-only" id="menu-button" type="button" aria-label="${t.header.openMenu}" aria-controls="mobile-menu" aria-expanded="false">
+        <button class="menu-toggle dads-hamburger-menu-button mobile-only" id="menu-button" type="button" aria-label="${t.header.openMenu}" aria-controls="mobile-menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </header>
@@ -28,80 +28,80 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
         <div>
           <h1>${t.hero.titleLine1}<br><em>${t.hero.titleEmphasis}</em></h1>
         </div>
-        <p class="hero-copy">${t.hero.copy}</p>
+        <p class="hero__copy">${t.hero.copy}</p>
       </section>
 
       <section class="workspace">
-        <div class="camera-card">
-          <div class="camera-stage" id="camera-stage">
-            <video id="video" playsinline muted></video>
-            <canvas id="overlay"></canvas>
-            <div class="camera-placeholder" id="camera-placeholder">
-              <div class="cat-orbit">
-                <img class="camera-cat" data-cat-icon src="${catRelaxedUrl}" alt="">
+        <div class="camera">
+          <div class="camera__stage" id="camera-stage">
+            <video class="camera__video" id="video" playsinline muted></video>
+            <canvas class="camera__overlay" id="overlay"></canvas>
+            <div class="camera__placeholder" id="camera-placeholder">
+              <div class="camera__cat-orbit">
+                <img class="camera__cat" data-cat-icon src="${catRelaxedUrl}" alt="">
               </div>
               <h2>${t.camera.placeholderTitle}</h2>
               <p>${t.camera.placeholderCopy}</p>
             </div>
-            <div class="calibration-overlay" id="calibration-overlay" hidden>
-              <div class="countdown-ring"><span id="countdown">3</span></div>
+            <div class="calibration" id="calibration-overlay" hidden>
+              <div class="calibration__countdown"><span id="countdown">3</span></div>
               <strong id="calibration-title">${t.calibration.goodTitle}</strong>
               <small id="calibration-help">${t.calibration.goodHelp}</small>
             </div>
             <div class="status-pill" id="status-pill" hidden>
-              <span></span><b id="status-label">${t.camera.statusMeasuring}</b>
+              <span class="status-pill__indicator"></span><b id="status-label">${t.camera.statusMeasuring}</b>
             </div>
             <div class="gesture-feedback" id="gesture-feedback" role="status" hidden>
               <b id="gesture-feedback-label"></b>
-              <span class="gesture-progress"><i id="gesture-progress-bar"></i></span>
+              <span class="gesture-feedback__progress"><i class="gesture-feedback__progress-bar" id="gesture-progress-bar"></i></span>
             </div>
             ${posturePanel()}
-            <div class="alert-flash" id="alert-flash" hidden>${t.camera.alert}</div>
+            <div class="alert" id="alert-flash" hidden>${t.camera.alert}</div>
           </div>
-          <div class="camera-actions">
-            <button class="button primary dads-button" data-type="solid-fill" data-size="lg" id="start-button">
-              <svg class="button-icon camera-icon" aria-hidden="true" viewBox="0 0 24 24">
+          <div class="camera__actions">
+            <button class="button button--primary button--start dads-button" data-type="solid-fill" data-size="lg" id="start-button">
+              <svg class="button__icon" aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M14.5 4.5 16.2 7H20a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3.8l1.7-2.5h5Z"></path>
                 <circle cx="12" cy="13" r="4"></circle>
               </svg>
               <span id="start-button-label">${t.camera.start}</span>
             </button>
-            <button class="button secondary dads-button" data-type="outline" data-size="lg" id="pause-button" type="button" disabled>
-              <svg class="button-icon" id="pause-button-pause-icon" aria-hidden="true" viewBox="0 0 24 24">
+            <button class="button button--secondary dads-button" data-type="outline" data-size="lg" id="pause-button" type="button" disabled>
+              <svg class="button__icon" id="pause-button-pause-icon" aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M8 5v14"></path>
                 <path d="M16 5v14"></path>
               </svg>
-              <svg class="button-icon" id="pause-button-resume-icon" aria-hidden="true" viewBox="0 0 24 24" hidden>
+              <svg class="button__icon" id="pause-button-resume-icon" aria-hidden="true" viewBox="0 0 24 24" hidden>
                 <path d="m8 5 11 7-11 7Z"></path>
               </svg>
               <span id="pause-button-label">${t.camera.pause}</span>
             </button>
-            <button class="button secondary dads-button" data-type="outline" data-size="lg" id="calibrate-button" disabled>
-              <svg class="button-icon" aria-hidden="true" viewBox="0 0 24 24">
+            <button class="button button--secondary dads-button" data-type="outline" data-size="lg" id="calibrate-button" disabled>
+              <svg class="button__icon" aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"></path>
                 <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"></path>
               </svg>
               <span id="calibrate-button-label">${t.camera.recalibrate}</span>
             </button>
           </div>
-          <p class="gesture-guide" id="gesture-guide">${t.gesture.guide}</p>
+          <p class="camera__gesture-guide" id="gesture-guide">${t.gesture.guide}</p>
         </div>
 
-        <div class="menu-scrim mobile-only" id="menu-scrim" hidden></div>
-        <aside class="side-panel" id="mobile-menu" aria-label="${t.settings.panelAria}">
-          <div class="drawer-head mobile-only">
+        <div class="drawer-scrim mobile-only" id="menu-scrim" hidden></div>
+        <aside class="settings-panel" id="mobile-menu" aria-label="${t.settings.panelAria}">
+          <div class="settings-panel__header mobile-only">
             <div>
               <h2>${t.settings.menuTitle}</h2>
             </div>
-            <button class="close-button dads-button" data-type="text" data-size="sm" id="close-menu-button" type="button" aria-label="${t.header.closeMenu}">×</button>
+            <button class="settings-panel__close dads-button" data-type="text" data-size="sm" id="close-menu-button" type="button" aria-label="${t.header.closeMenu}">×</button>
           </div>
           <div class="mobile-only">${languageSelect(t, locale, "mobile")}</div>
           ${settingsPanel()}
           <div class="tip">
-            <span class="tip-icon">i</span>
+            <span class="tip__icon">i</span>
             <p><b>${t.tip.title}</b>${t.tip.body}</p>
           </div>
-          <nav class="menu-links mobile-only" aria-label="${t.common.brand}">
+          <nav class="settings-panel__links mobile-only" aria-label="${t.common.brand}">
             <a href="https://github.com/mujuko/nekozekenchi" target="_blank" rel="noreferrer">${githubIcon()}<span>${t.common.sourceCode}</span></a>
             <a href="https://pocket-se.info/" target="_blank" rel="noreferrer">${t.common.soundCredit}</a>
             <span>${t.common.copyright}</span>
@@ -117,20 +117,20 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
   `;
   function posturePanel() {
     return `
-      <div class="metric-card posture-overlay">
-        <div class="meter">
-          <div class="meter-track"><div class="meter-fill" data-meter-fill></div></div>
+      <div class="posture-status">
+        <div class="posture-status__meter">
+          <div class="posture-status__track"><div class="posture-status__fill" data-meter-fill></div></div>
         </div>
-        <div class="posture-badge idle" data-posture-badge>${t.posture.idleBadge}</div>
+        <div class="posture-status__badge posture-status__badge--idle" data-posture-badge>${t.posture.idleBadge}</div>
       </div>
     `;
   }
 
   function settingsPanel() {
     return `
-      <div class="settings-card">
+      <div class="settings">
         <h2>${t.settings.panelTitle}</h2>
-        <label class="setting-row">
+        <label class="settings__row">
           <span><b>${t.settings.sensitivity}</b><small>${t.settings.sensitivityHelp}</small></span>
           <select class="dads-select" id="sensitivity">
             <option value="0.9">${t.settings.sensitivityLoose}</option>
@@ -138,7 +138,7 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
             <option value="0.6">${t.settings.sensitivitySensitive}</option>
           </select>
         </label>
-        <label class="setting-row">
+        <label class="settings__row">
           <span><b>${t.settings.duration}</b><small>${t.settings.durationHelp}</small></span>
           <select class="dads-select" id="duration">
             <option value="2000">${t.settings.seconds(2)}</option>
@@ -146,30 +146,30 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
             <option value="5000">${t.settings.seconds(5)}</option>
           </select>
         </label>
-        <div class="setting-row display-setting">
+        <div class="settings__row settings__row--display">
           <span><b>${t.settings.display}</b><small>${t.settings.displayHelp}</small></span>
-          <div class="display-choice-list" aria-label="${t.settings.displayLabel}">
+          <div class="choice-list choice-list--display" aria-label="${t.settings.displayLabel}">
             <label><input type="checkbox" value="video" data-display-choice checked>${t.settings.showVideo}</label>
             <label><input type="checkbox" value="poseGuide" data-display-choice checked>${t.settings.showPoseGuide}</label>
             <label><input type="checkbox" value="uprightLine" data-display-choice checked>${t.settings.showUprightLine}</label>
             <label><input type="checkbox" value="slouchLine" data-display-choice checked>${t.settings.showSlouchLine}</label>
           </div>
         </div>
-        <div class="setting-row sound-setting">
+        <div class="settings__row settings__row--sound">
           <span><b>${t.settings.sound}</b><small>${t.settings.soundHelp}</small></span>
-          <div class="sound-controls">
-            <div class="sound-choice-list" aria-label="${t.settings.soundKindLabel}">
+          <div class="sound-settings">
+            <div class="choice-list choice-list--sound" aria-label="${t.settings.soundKindLabel}">
               <label><input type="checkbox" value="tone" data-sound-choice checked>${t.settings.soundTone}</label>
               <label><input type="checkbox" value="cat10" data-sound-choice>${t.settings.soundCat(1)}</label>
               <label><input type="checkbox" value="cat11" data-sound-choice>${t.settings.soundCat(2)}</label>
               <label><input type="checkbox" value="cat15" data-sound-choice>${t.settings.soundCat(3)}</label>
               <label><input type="checkbox" value="cat30" data-sound-choice>${t.settings.soundCat(4)}</label>
             </div>
-            <div class="sound-volume">
-              <button class="sound-button mute-button dads-button" data-type="outline" data-size="sm" id="mute-button" type="button" aria-pressed="false" aria-label="${t.settings.muteLabel}">${t.settings.mute}</button>
+            <div class="sound-settings__volume">
+              <button class="sound-settings__button sound-settings__button--mute dads-button" data-type="outline" data-size="sm" id="mute-button" type="button" aria-pressed="false" aria-label="${t.settings.muteLabel}">${t.settings.mute}</button>
               <input id="sound-volume" type="range" min="0" max="100" step="5" value="50" aria-label="${t.settings.volumeLabel}">
             </div>
-            <button class="sound-button sound-test-button dads-button" data-type="outline" data-size="sm" id="sound-button" type="button" aria-label="${t.settings.testSoundLabel}">${t.settings.testSound}</button>
+            <button class="sound-settings__button sound-settings__button--test dads-button" data-type="outline" data-size="sm" id="sound-button" type="button" aria-label="${t.settings.testSoundLabel}">${t.settings.testSound}</button>
           </div>
         </div>
       </div>
@@ -199,18 +199,18 @@ export function updateAppLocale(
     ?.setAttribute("content", t.meta.description);
   updateHeadLocale(t, locale);
 
-  setText(".brand .brand-mark + span", t.common.brand);
+  setText(".brand__name", t.common.brand);
   document
     .querySelector(".brand")
     ?.setAttribute("aria-label", t.header.homeLabel);
   document
-    .querySelector(".brand-version")
+    .querySelector(".brand__version")
     ?.setAttribute("aria-label", t.header.versionLabel(appVersion));
   document
-    .querySelector(".github-button")
+    .querySelector(".source-link")
     ?.setAttribute("aria-label", t.common.github);
-  document.querySelector(".github-button")?.setAttribute("title", t.common.github);
-  setText(".github-button span", t.common.sourceCode);
+  document.querySelector(".source-link")?.setAttribute("title", t.common.github);
+  setText(".source-link span", t.common.sourceCode);
   elements.menuButton?.setAttribute("aria-label", t.header.openMenu);
 
   document.querySelectorAll<HTMLSelectElement>("[data-locale-select]").forEach((select) => {
@@ -221,7 +221,7 @@ export function updateAppLocale(
     if (enOption) enOption.textContent = t.common.english;
   });
   document
-    .querySelectorAll<HTMLSpanElement>(".language-select > span")
+    .querySelectorAll<HTMLSpanElement>(".language-picker > span")
     .forEach((label) => {
       label.textContent = t.common.language;
     });
@@ -234,7 +234,7 @@ export function updateAppLocale(
     emphasis.textContent = t.hero.titleEmphasis;
     heroTitle.append(emphasis);
   }
-  setText(".hero-copy", t.hero.copy);
+  setText(".hero__copy", t.hero.copy);
 
   setText("#camera-placeholder h2", t.camera.placeholderTitle);
   setText("#camera-placeholder p", t.camera.placeholderCopy);
@@ -244,9 +244,9 @@ export function updateAppLocale(
   elements.gestureGuide.textContent = t.gesture.guide;
 
   elements.mobileMenu.setAttribute("aria-label", t.settings.panelAria);
-  setText(".drawer-head h2", t.settings.menuTitle);
+  setText(".settings-panel__header h2", t.settings.menuTitle);
   elements.closeMenuButton?.setAttribute("aria-label", t.header.closeMenu);
-  setText(".settings-card h2", t.settings.panelTitle);
+  setText(".settings h2", t.settings.panelTitle);
   updateSettingRow("#sensitivity", t.settings.sensitivity, t.settings.sensitivityHelp);
   updateSelectOption(elements.sensitivity, "0.9", t.settings.sensitivityLoose);
   updateSelectOption(elements.sensitivity, "0.75", t.settings.sensitivityNormal);
@@ -256,11 +256,11 @@ export function updateAppLocale(
   updateSelectOption(elements.duration, "3000", t.settings.seconds(3));
   updateSelectOption(elements.duration, "5000", t.settings.seconds(5));
 
-  const displaySetting = document.querySelector(".display-setting");
+  const displaySetting = document.querySelector(".settings__row--display");
   displaySetting?.querySelector("b")?.replaceChildren(t.settings.display);
   displaySetting?.querySelector("small")?.replaceChildren(t.settings.displayHelp);
   displaySetting
-    ?.querySelector(".display-choice-list")
+    ?.querySelector(".choice-list--display")
     ?.setAttribute("aria-label", t.settings.displayLabel);
   const displayLabels = [
     t.settings.showVideo,
@@ -274,11 +274,11 @@ export function updateAppLocale(
     }
   });
 
-  const soundSetting = document.querySelector(".sound-setting");
+  const soundSetting = document.querySelector(".settings__row--sound");
   soundSetting?.querySelector("b")?.replaceChildren(t.settings.sound);
   soundSetting?.querySelector("small")?.replaceChildren(t.settings.soundHelp);
   document
-    .querySelector(".sound-choice-list")
+    .querySelector(".choice-list--sound")
     ?.setAttribute("aria-label", t.settings.soundKindLabel);
   const soundLabels = [
     t.settings.soundTone,
@@ -306,11 +306,11 @@ export function updateAppLocale(
   }
 
   document
-    .querySelector(".menu-links")
+    .querySelector(".settings-panel__links")
     ?.setAttribute("aria-label", t.common.brand);
-  setText(".menu-links > a:first-child span", t.common.sourceCode);
-  setText(".menu-links > a:nth-child(2)", t.common.soundCredit);
-  setText(".menu-links > span:last-child", t.common.copyright);
+  setText(".settings-panel__links > a:first-child span", t.common.sourceCode);
+  setText(".settings-panel__links > a:nth-child(2)", t.common.soundCredit);
+  setText(".settings-panel__links > span:last-child", t.common.copyright);
   setText(".app-footer span", t.common.copyright);
   setText(".app-footer a", t.common.soundCredit);
 }
@@ -365,7 +365,7 @@ function setText(selector: string, text: string) {
 }
 
 function updateSettingRow(selectSelector: string, title: string, help: string) {
-  const row = document.querySelector(selectSelector)?.closest(".setting-row");
+  const row = document.querySelector(selectSelector)?.closest(".settings__row");
   row?.querySelector("b")?.replaceChildren(title);
   row?.querySelector("small")?.replaceChildren(help);
 }
@@ -423,7 +423,7 @@ function queryAll<T extends Element>(selector: string): NodeListOf<T> {
 
 function languageSelect(t: Messages, locale: Locale, placement: string) {
   return `
-    <label class="language-select language-select-${placement}">
+    <label class="language-picker language-picker--${placement}">
       <span>${t.common.language}</span>
       <select data-locale-select>
         <option value="ja"${locale === "ja" ? " selected" : ""}>${t.common.japanese}</option>

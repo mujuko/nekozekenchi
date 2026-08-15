@@ -92,14 +92,14 @@ export function createPostureWatcher(
       await playVideo(elements.video, getMessages());
 
       elements.placeholder.hidden = true;
-      elements.video.classList.add("visible");
+      elements.video.classList.add("camera__video--visible");
       elements.statusPill.hidden = false;
       elements.pauseButton.disabled = true;
       updatePauseButton(false);
       elements.calibrateButton.disabled = false;
       statusView.setStartButtonLabel(getMessages().camera.stop);
       elements.startButton.disabled = false;
-      elements.startButton.classList.add("stop");
+      elements.startButton.classList.add("button--stop");
       elements.startButton.onclick = stopCamera;
       overlay.resizeCanvas();
       calibration.begin();
@@ -119,7 +119,7 @@ export function createPostureWatcher(
     stream = null;
     elements.video.srcObject = null;
     overlay.clear();
-    elements.video.classList.remove("visible");
+    elements.video.classList.remove("camera__video--visible");
     elements.placeholder.hidden = false;
     elements.statusPill.hidden = true;
     elements.calibrationOverlay.hidden = true;
@@ -133,7 +133,7 @@ export function createPostureWatcher(
     elements.calibrateButton.disabled = true;
     statusView.setStartButtonLabel(getMessages().camera.start);
     statusView.setCameraMessage(getMessages().camera.placeholderCopy);
-    elements.startButton.classList.remove("stop");
+    elements.startButton.classList.remove("button--stop");
     elements.startButton.onclick = startCamera;
     postureState = createEmptyPostureState();
     statusView.updateStatus("idle", 0, 0);
@@ -372,7 +372,7 @@ export function createPostureWatcher(
     window.clearTimeout(gestureFeedbackTimer);
     gestureFeedbackUntil = 0;
     elements.gestureFeedback.hidden = false;
-    elements.gestureFeedback.classList.remove("complete");
+    elements.gestureFeedback.classList.remove("gesture-feedback--complete");
     elements.gestureFeedbackLabel.textContent = t.gesture.hold(gestureName);
     elements.gestureProgressBar.style.width = `${Math.round(progress * 100)}%`;
   }
@@ -381,7 +381,7 @@ export function createPostureWatcher(
     window.clearTimeout(gestureFeedbackTimer);
     gestureFeedbackUntil = now + GESTURE_COMPLETE_DISPLAY_MS;
     elements.gestureFeedback.hidden = false;
-    elements.gestureFeedback.classList.add("complete");
+    elements.gestureFeedback.classList.add("gesture-feedback--complete");
     elements.gestureFeedbackLabel.textContent = message;
     elements.gestureProgressBar.style.width = "100%";
     gestureFeedbackTimer = window.setTimeout(() => {
@@ -395,7 +395,7 @@ export function createPostureWatcher(
     gestureFeedbackTimer = 0;
     gestureFeedbackUntil = 0;
     elements.gestureFeedback.hidden = true;
-    elements.gestureFeedback.classList.remove("complete");
+    elements.gestureFeedback.classList.remove("gesture-feedback--complete");
     elements.gestureProgressBar.style.width = "0";
   }
 

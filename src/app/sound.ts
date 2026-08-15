@@ -79,7 +79,7 @@ export function createSoundController(elements: AppElements, getMessages: Messag
     const muted = volume <= 0;
 
     elements.soundVolume.setAttribute("aria-valuetext", `${volume}%`);
-    elements.muteButton.classList.toggle("muted", muted);
+    elements.muteButton.classList.toggle("sound-settings__button--muted", muted);
     elements.muteButton.textContent = muted ? t.settings.unmute : t.settings.mute;
     elements.muteButton.setAttribute("aria-pressed", String(muted));
     elements.muteButton.setAttribute(
@@ -295,10 +295,12 @@ export function createSoundController(elements: AppElements, getMessages: Messag
 
   function flashAlert() {
     elements.alertFlash.hidden = false;
-    elements.alertFlash.classList.remove("show");
-    requestAnimationFrame(() => elements.alertFlash.classList.add("show"));
+    elements.alertFlash.classList.remove("alert--visible");
+    requestAnimationFrame(() =>
+      elements.alertFlash.classList.add("alert--visible"),
+    );
     window.setTimeout(() => {
-      elements.alertFlash.classList.remove("show");
+      elements.alertFlash.classList.remove("alert--visible");
       window.setTimeout(() => {
         elements.alertFlash.hidden = true;
       }, 300);

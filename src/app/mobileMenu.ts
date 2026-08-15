@@ -2,7 +2,7 @@ import type { AppElements } from "../ui";
 
 export function bindMobileMenu(elements: AppElements) {
   function setOpen(open: boolean) {
-    elements.mobileMenu.classList.toggle("open", open);
+    elements.mobileMenu.classList.toggle("settings-panel--open", open);
     elements.menuButton?.setAttribute("aria-expanded", String(open));
     if (elements.menuScrim) elements.menuScrim.hidden = !open;
   }
