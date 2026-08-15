@@ -114,6 +114,7 @@ export function createPostureWatcher(
     updatePauseButton(false);
     elements.calibrateButton.disabled = true;
     statusView.setStartButtonLabel(getMessages().camera.start);
+    statusView.setCameraMessage(getMessages().camera.placeholderCopy);
     elements.startButton.classList.remove("stop");
     elements.startButton.onclick = startCamera;
     postureState = createEmptyPostureState();
