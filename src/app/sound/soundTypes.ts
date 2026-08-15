@@ -1,5 +1,4 @@
 export const DEFAULT_SOUND_VOLUME = 50;
-export const DEFAULT_SOUND_CHOICE: SoundChoiceId = "tone";
 
 export const SOUND_CHOICE_IDS = [
   "tone",
@@ -10,6 +9,14 @@ export const SOUND_CHOICE_IDS = [
 ] as const;
 
 export type SoundChoiceId = (typeof SOUND_CHOICE_IDS)[number];
+
+export const DEFAULT_SOUND_CHOICE: SoundChoiceId = "cat10";
+export const DEFAULT_SOUND_CHOICES: SoundChoiceId[] = [
+  "cat10",
+  "cat11",
+  "cat15",
+  "cat30",
+];
 
 export type SoundPreferences = {
   volume: number;

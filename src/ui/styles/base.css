@@ -8,7 +8,7 @@ html {
 
 body {
     min-width: 320px;
-    min-height: 100vh;
+    min-height: 100svh;
     margin: 0;
     background: var(--color-background);
 }
@@ -50,7 +50,7 @@ button {
 :focus-visible {
     outline: 3px solid var(--color-focus);
     outline-offset: 3px;
-    box-shadow: none;
+    box-shadow: 0 0 0 2px var(--color-focus-halo);
 }
 
 .mobile-only {

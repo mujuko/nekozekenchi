@@ -1,5 +1,5 @@
 import {
-  DEFAULT_SOUND_CHOICE,
+  DEFAULT_SOUND_CHOICES,
   DEFAULT_SOUND_VOLUME,
   clampVolume,
   isSoundChoiceId,
@@ -57,15 +57,15 @@ export function createSoundPreferencesStore(): SoundPreferencesStore {
 
 function loadSoundChoices(): SoundChoiceId[] {
   const savedChoices = localStorage.getItem(SOUND_CHOICES_KEY);
-  if (!savedChoices) return [DEFAULT_SOUND_CHOICE];
+  if (!savedChoices) return [...DEFAULT_SOUND_CHOICES];
 
   try {
     const parsedChoices = JSON.parse(savedChoices);
-    if (!Array.isArray(parsedChoices)) return [DEFAULT_SOUND_CHOICE];
+    if (!Array.isArray(parsedChoices)) return [...DEFAULT_SOUND_CHOICES];
 
     const validChoices = parsedChoices.filter(isSoundChoiceId);
-    return validChoices.length > 0 ? validChoices : [DEFAULT_SOUND_CHOICE];
+    return validChoices.length > 0 ? validChoices : [...DEFAULT_SOUND_CHOICES];
   } catch {
-    return [DEFAULT_SOUND_CHOICE];
+    return [...DEFAULT_SOUND_CHOICES];
   }
 }

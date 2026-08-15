@@ -18,52 +18,54 @@ export function updateAppLocale(
     ?.setAttribute("content", t.meta.description);
   updateHeadLocale(t, locale);
 
-  setText(".brand__name", t.common.brand);
-  document.querySelector(".brand")?.setAttribute("aria-label", t.header.homeLabel);
+  setText(".header-brand__name", t.common.brand);
   document
-    .querySelector(".brand__version")
+    .querySelector(".header-brand")
+    ?.setAttribute("aria-label", t.header.homeLabel);
+  setText(".app-tagline", t.header.tagline);
+  document
+    .querySelector(".app-footer__version")
     ?.setAttribute("aria-label", t.header.versionLabel(appVersion));
-  document
-    .querySelector(".source-link")
-    ?.setAttribute("aria-label", t.common.github);
-  document.querySelector(".source-link")?.setAttribute("title", t.common.github);
-  setText(".source-link span", t.common.sourceCode);
+  setText(".app-footer__source-link span", t.common.sourceCode);
   navigation.menuButton?.setAttribute("aria-label", t.header.openMenu);
 
   document.querySelectorAll<HTMLSelectElement>("[data-locale-select]").forEach((select) => {
     select.value = locale;
+    select.setAttribute("aria-label", t.common.language);
     const jaOption = select.querySelector<HTMLOptionElement>('option[value="ja"]');
     const enOption = select.querySelector<HTMLOptionElement>('option[value="en"]');
     if (jaOption) jaOption.textContent = t.common.japanese;
     if (enOption) enOption.textContent = t.common.english;
   });
   document
-    .querySelectorAll<HTMLSpanElement>(".language-picker > span")
+    .querySelectorAll<HTMLSpanElement>(".language-picker__label")
     .forEach((label) => {
       label.textContent = t.common.language;
     });
-
-  setText(".hero h1", "");
-  const heroTitle = document.querySelector<HTMLHeadingElement>(".hero h1");
-  if (heroTitle) {
-    heroTitle.append(t.hero.titleLine1, document.createElement("br"));
-    const emphasis = document.createElement("em");
-    emphasis.textContent = t.hero.titleEmphasis;
-    heroTitle.append(emphasis);
-  }
-  setText(".hero__copy", t.hero.copy);
 
   setText("#camera-placeholder h2", t.camera.placeholderTitle);
   setText("#camera-placeholder p", t.camera.placeholderCopy);
   monitoring.pauseButtonLabel.textContent = t.camera.pause;
   monitoring.calibrateButtonLabel.textContent = t.camera.recalibrate;
   alert.alertFlash.textContent = t.camera.alert;
-  monitoring.gestureGuide.textContent = t.gesture.guide;
+  document
+    .querySelectorAll<HTMLElement>("[data-gesture-guide-title]")
+    .forEach((title) => {
+      title.textContent = t.gesture.guideTitle;
+    });
+  monitoring.gestureGuides.forEach((guide) => {
+    guide.replaceChildren(
+      ...t.gesture.guideItems.map((item) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = item;
+        return listItem;
+      }),
+    );
+  });
 
   navigation.mobileMenu.setAttribute("aria-label", t.settings.panelAria);
   setText(".settings-panel__header h2", t.settings.menuTitle);
   navigation.closeMenuButton?.setAttribute("aria-label", t.header.closeMenu);
-  setText(".settings h2", t.settings.panelTitle);
   updateSettingRow("#sensitivity", t.settings.sensitivity, t.settings.sensitivityHelp);
   updateSelectOption(monitoring.sensitivity, "0.9", t.settings.sensitivityLoose);
   updateSelectOption(monitoring.sensitivity, "0.75", t.settings.sensitivityNormal);
@@ -112,22 +114,12 @@ export function updateAppLocale(
   soundSettings.soundButton.textContent = t.settings.testSound;
   soundSettings.soundButton.setAttribute("aria-label", t.settings.testSoundLabel);
 
-  const tipParagraph = document.querySelector<HTMLParagraphElement>(".tip p");
-  if (tipParagraph) {
-    tipParagraph.replaceChildren();
-    const title = document.createElement("b");
-    title.textContent = t.tip.title;
-    tipParagraph.append(title, t.tip.body);
-  }
-
+  setText(".app-footer__product-name", t.common.brand);
   document
-    .querySelector(".settings-panel__links")
-    ?.setAttribute("aria-label", t.common.brand);
-  setText(".settings-panel__links > a:first-child span", t.common.sourceCode);
-  setText(".settings-panel__links > a:nth-child(2)", t.common.soundCredit);
-  setText(".settings-panel__links > span:last-child", t.common.copyright);
-  setText(".app-footer span", t.common.copyright);
-  setText(".app-footer a", t.common.soundCredit);
+    .querySelector<HTMLImageElement>(".app-footer__company-logo")
+    ?.setAttribute("alt", t.common.company);
+  setText(".app-footer__product p", t.footer.summary);
+  setText(".app-footer__sound-credit span", t.common.soundCredit);
 }
 
 function setText(selector: string, text: string) {

@@ -17,7 +17,7 @@ const ja = {
   schemaAlternateName: "Nekozekenchi",
   noscriptTitle: "ねこ背検知 - 猫背監視アプリ",
   noscriptBody:
-    "ねこ背検知は、カメラで姿勢を見守り、猫背が続いたときに音で知らせるWebアプリです。カメラ映像は送信されず、端末内だけで姿勢を判定します。",
+    "ねこ背検知は、カメラで姿勢を推定し、猫背を音で通知するWebアプリです。カメラ映像は外部に送信せず、端末内だけで処理します。",
 };
 
 const en = {

@@ -1,5 +1,6 @@
 import {
   DEFAULT_SOUND_CHOICE,
+  DEFAULT_SOUND_CHOICES,
   DEFAULT_SOUND_VOLUME,
   clampVolume,
   type SoundChoiceId,
@@ -28,7 +29,7 @@ export function createSoundService(
   let preferences: SoundPreferences = {
     volume: DEFAULT_SOUND_VOLUME,
     lastAudibleVolume: DEFAULT_SOUND_VOLUME,
-    choices: [DEFAULT_SOUND_CHOICE],
+    choices: [...DEFAULT_SOUND_CHOICES],
   };
   const listeners = new Set<() => void>();
 

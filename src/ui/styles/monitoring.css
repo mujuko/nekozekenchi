@@ -3,8 +3,18 @@
     flex-direction: column;
     padding: 16px;
     background: var(--paper);
-    border: 1px solid var(--border);
-    border-radius: 12px;
+    border: 1px solid var(--sumizome-800);
+    border-radius: 8px;
+    box-shadow: 6px 6px 0 var(--sumizome-200);
+
+    .camera__heading {
+        margin: -16px -16px 0;
+        padding: 21px 24px;
+
+        .section-label {
+            font-size: 13px;
+        }
+    }
 
     .camera__stage {
         position: relative;
@@ -12,8 +22,26 @@
         aspect-ratio: 4 / 3;
         min-height: 0;
         overflow: hidden;
-        background: #252525;
+        background: var(--sumizome-1100);
         border-radius: 8px;
+    }
+
+    .camera__menu-toggle {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 5;
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+        padding: 8px;
+        color: var(--color-text-on-inverted);
+        background: rgb(34 34 31 / 88%);
+        border: 1px solid var(--sumizome-700);
+
+        &:hover {
+            background: var(--sumizome-800);
+        }
     }
 
     .camera__video,
@@ -46,7 +74,7 @@
         place-content: center;
         justify-items: center;
         padding: 24px;
-        color: #fff;
+        color: var(--sumizome-0);
         text-align: center;
 
         &[hidden] {
@@ -61,7 +89,7 @@
 
         p {
             margin: 0;
-            color: #ccc;
+            color: var(--sumizome-300);
             font-size: 14px;
             line-height: 1.7;
         }
@@ -73,7 +101,7 @@
         height: 96px;
         place-items: center;
         background: var(--color-surface);
-        border: 1px solid #767676;
+        border: 1px solid var(--sumizome-600);
         border-radius: 50%;
     }
 
@@ -91,32 +119,27 @@
         padding-top: 16px;
     }
 
-    .camera__gesture-guide {
-        margin: 10px 4px 0;
-        color: var(--color-neutral-600);
-        font-size: 13px;
-        line-height: 1.6;
-    }
-
     @media (max-width: 700px) {
-        min-height: calc(100dvh - 88px);
-        padding: 8px;
-        border-radius: 8px;
+        min-height: calc(100svh - 56px);
+        padding: 0 0 max(12px, env(safe-area-inset-bottom));
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+
+        .camera__heading {
+            display: none;
+        }
 
         .camera__stage {
             height: auto;
-            border-radius: 6px;
+            border-radius: 0;
         }
 
         .camera__actions {
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 8px;
+            margin: 0 8px;
             padding-top: 8px;
-        }
-
-        .camera__gesture-guide {
-            margin-top: 8px;
-            font-size: 12px;
         }
 
         .camera__placeholder {
@@ -142,6 +165,45 @@
     }
 }
 
+.gesture-guide {
+    margin-top: 14px;
+    padding: 16px 18px 18px;
+    color: var(--color-information-text);
+    background: var(--color-information-bg);
+    border-left: 4px solid var(--color-information);
+    font-size: 13px;
+    line-height: 1.7;
+
+    strong {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--color-information-text);
+        font-size: 14px;
+    }
+
+    ul {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px 24px;
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    li {
+        min-width: 0;
+
+        &::marker {
+            color: var(--color-information);
+        }
+    }
+
+    @media (max-width: 1050px) {
+        ul {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+}
+
 
 .calibration {
     position: absolute;
@@ -149,7 +211,7 @@
     display: grid;
     place-content: center;
     justify-items: center;
-    color: #fff;
+    color: var(--sumizome-0);
     text-align: center;
     background: rgb(0 0 0 / 68%);
 
@@ -163,7 +225,7 @@
         height: 92px;
         margin-bottom: 22px;
         place-items: center;
-        border: 4px solid #767676;
+        border: 4px solid var(--sumizome-600);
         border-top-color: var(--color-brand-bright);
         border-radius: 50%;
         font-size: 36px;
@@ -181,7 +243,7 @@
 
     small {
         margin-top: 8px;
-        color: #e6e6e6;
+        color: var(--sumizome-200);
         font-size: 14px;
     }
 
@@ -220,9 +282,9 @@
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
-    color: #fff;
-    background: rgb(26 26 26 / 90%);
-    border: 1px solid #767676;
+    color: var(--color-text-on-inverted);
+    background: rgb(34 34 31 / 92%);
+    border: 1px solid var(--sumizome-700);
     border-radius: 4px;
     font-size: 14px;
 
@@ -238,7 +300,7 @@
     }
 
     &.status-pill--bad {
-        color: var(--ink);
+        color: var(--color-error-text);
         background: var(--color-error-bg);
         border-color: var(--color-error);
 
@@ -248,12 +310,12 @@
     }
 
     &.status-pill--calibrating .status-pill__indicator {
-        background: #fff;
+        background: var(--sumizome-0);
         animation: pulse 1s ease infinite;
     }
 
     &.status-pill--paused .status-pill__indicator {
-        background: #b3b3b3;
+        background: var(--sumizome-400);
     }
 
     @media (max-width: 700px) {
@@ -278,10 +340,10 @@
     width: min(320px, calc(100% - 160px));
     gap: 7px;
     padding: 9px 12px;
-    color: #fff;
+    color: var(--color-text-on-inverted);
     text-align: center;
-    background: rgb(26 26 26 / 92%);
-    border: 1px solid #aaa;
+    background: rgb(34 34 31 / 94%);
+    border: 1px solid var(--sumizome-500);
     border-radius: 4px;
     font-size: 14px;
     transform: translateX(-50%);
@@ -306,7 +368,7 @@
     }
 
     &.gesture-feedback--complete {
-        color: var(--ink);
+        color: var(--color-success-text);
         background: var(--color-success-bg);
         border-color: var(--color-success);
 
@@ -328,7 +390,7 @@
     z-index: 3;
     max-width: calc(100% - 32px);
     padding: 12px 20px;
-    color: var(--ink);
+    color: var(--color-error-text);
     background: var(--color-error-bg);
     border: 2px solid var(--color-error);
     border-radius: 4px;
@@ -403,13 +465,13 @@
         font-weight: 700;
 
         &.posture-status__badge--good {
-            color: var(--ink);
+            color: var(--color-success-text);
             background: var(--color-success-bg);
             border-color: var(--color-success);
         }
 
         &.posture-status__badge--bad {
-            color: var(--ink);
+            color: var(--color-error-text);
             background: var(--color-error-bg);
             border-color: var(--color-error);
         }
@@ -429,7 +491,7 @@
         border-color: var(--color-error);
 
         .posture-status__track {
-            background: #fff;
+            background: var(--sumizome-0);
             border: 1px solid var(--color-error);
         }
 

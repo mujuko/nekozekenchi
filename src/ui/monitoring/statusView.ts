@@ -21,6 +21,10 @@ export function createStatusView(
     elements.placeholder.querySelector("p")!.textContent = message;
   }
 
+  function setCameraTitle(title: string) {
+    elements.placeholder.querySelector("h2")!.textContent = title;
+  }
+
   function setPostureBadge(status: PostureViewStatus, text: string) {
     elements.postureBadges.forEach((element) => {
       element.className = `posture-status__badge posture-status__badge--${status}`;
@@ -92,6 +96,7 @@ export function createStatusView(
     refreshLocale,
     setStartButtonLabel,
     setCameraMessage,
+    setCameraTitle,
     setPostureBadge,
     setMeterProgress,
     updateStatus,
