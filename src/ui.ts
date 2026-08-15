@@ -1,14 +1,15 @@
 import type { Locale, Messages } from "./i18n";
+import catRelaxedUrl from "./assets/cat-relaxed.svg";
+import catTriggeredUrl from "./assets/cat-triggered.svg";
+
+export type CatMood = "relaxed" | "triggered";
 
 export function renderApp(appVersion: string, t: Messages, locale: Locale) {
   return `
     <main class="app-shell">
       <header class="topbar">
         <a class="brand" href="#" aria-label="${t.header.homeLabel}">
-          <span class="brand-mark" aria-hidden="true">
-            <span class="ear ear-left"></span><span class="ear ear-right"></span>
-            <span class="face-dot face-dot-left"></span><span class="face-dot face-dot-right"></span>
-          </span>
+          <img class="brand-mark" data-cat-icon src="${catRelaxedUrl}" alt="">
           <span class="brand-name">${t.common.brand}</span>
           <span class="brand-version" aria-label="${t.header.versionLabel(appVersion)}">${appVersion}</span>
         </a>
@@ -37,7 +38,7 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
             <canvas id="overlay"></canvas>
             <div class="camera-placeholder" id="camera-placeholder">
               <div class="cat-orbit">
-                <div class="cat-head"><i></i><i></i><b></b><span></span></div>
+                <img class="camera-cat" data-cat-icon src="${catRelaxedUrl}" alt="">
               </div>
               <h2>${t.camera.placeholderTitle}</h2>
               <p>${t.camera.placeholderCopy}</p>
@@ -172,6 +173,13 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
 }
 
 export type AppElements = ReturnType<typeof getAppElements>;
+
+export function setCatMood(elements: AppElements, mood: CatMood) {
+  const src = mood === "triggered" ? catTriggeredUrl : catRelaxedUrl;
+  elements.catIcons.forEach((icon) => {
+    icon.src = src;
+  });
+}
 
 export function updateAppLocale(
   appVersion: string,
@@ -321,6 +329,7 @@ export function getAppElements() {
     calibrateButtonLabel: query<HTMLSpanElement>("#calibrate-button-label"),
     statusPill: query<HTMLDivElement>("#status-pill"),
     statusLabel: query<HTMLElement>("#status-label"),
+    catIcons: queryAll<HTMLImageElement>("[data-cat-icon]"),
     postureBadges: queryAll<HTMLDivElement>("[data-posture-badge]"),
     meterFills: queryAll<HTMLDivElement>("[data-meter-fill]"),
     sensitivity: query<HTMLSelectElement>("#sensitivity"),

@@ -1,4 +1,4 @@
-import type { AppElements } from "../ui";
+import { setCatMood, type AppElements } from "../ui";
 import type { Messages } from "../i18n";
 
 export type PostureViewStatus = "idle" | "missing" | "good" | "bad" | "paused";
@@ -43,6 +43,7 @@ export function createStatusView(elements: AppElements, getMessages: MessagesPro
     currentProgress = progress;
     currentBadDurationMs = badDurationMs;
     setMeterProgress(progress);
+    setCatMood(elements, status === "bad" ? "triggered" : "relaxed");
 
     if (status === "good") {
       setPostureBadge(status, t.posture.goodBadge);
