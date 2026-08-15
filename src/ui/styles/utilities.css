@@ -1,0 +1,30 @@
+@media (max-width: 700px) {
+    html {
+        scrollbar-gutter: auto;
+    }
+
+    body {
+        min-height: 100dvh;
+        overflow-x: hidden;
+        background: var(--color-surface);
+    }
+
+    .desktop-only {
+        display: none !important;
+    }
+
+    .mobile-only {
+        display: initial !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

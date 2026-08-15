@@ -1,0 +1,16 @@
+import type { NavigationElements } from "../shell/appElements";
+
+export function bindMobileMenu(elements: NavigationElements) {
+  function setOpen(open: boolean) {
+    elements.mobileMenu.classList.toggle("settings-panel--open", open);
+    elements.menuButton?.setAttribute("aria-expanded", String(open));
+    if (elements.menuScrim) elements.menuScrim.hidden = !open;
+  }
+
+  elements.menuButton?.addEventListener("click", () => setOpen(true));
+  elements.closeMenuButton?.addEventListener("click", () => setOpen(false));
+  elements.menuScrim?.addEventListener("click", () => setOpen(false));
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setOpen(false);
+  });
+}

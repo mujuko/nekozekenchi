@@ -1,0 +1,59 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scrollbar-gutter: stable;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    background: var(--color-background);
+}
+
+button,
+select,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+:where(a) {
+    &:any-link {
+        color: var(--color-link);
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+    }
+
+    &:visited {
+        color: var(--color-link-visited);
+    }
+
+    &:active {
+        color: var(--color-link-hover);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            color: var(--color-link-hover);
+            text-decoration-thickness: 3px;
+        }
+    }
+}
+
+:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+    box-shadow: none;
+}
+
+.mobile-only {
+    display: none !important;
+}
+
