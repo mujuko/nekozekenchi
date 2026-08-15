@@ -1,0 +1,78 @@
+:root {
+    color: #1a1a1a;
+    background: #f8f8fb;
+    font-family:
+        "Noto Sans JP",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Hiragino Sans",
+        "Yu Gothic UI",
+        "Yu Gothic",
+        Meiryo,
+        sans-serif;
+    font-synthesis: none;
+    --walime-50: #f9fbe8;
+    --walime-100: #f2f6c5;
+    --walime-200: #e8ef8e;
+    --walime-300: #dee959;
+    --walime-400: #d5e732;
+    --walime-500: #bed21f;
+    --walime-600: #a6b918;
+    --walime-700: #8f9d11;
+    --walime-800: #68750a;
+    --walime-900: #4b5605;
+    --walime-1000: #354003;
+    --walime-1100: #242d02;
+    --walime-1200: #151c00;
+    --color-link: #165e83;
+    --color-link-hover: #0f4561;
+    --color-link-visited: #654a78;
+    --color-success: #316745;
+    --color-success-bg: #edf5f0;
+    --color-information: #165e83;
+    --color-information-bg: #eef5f8;
+    --color-warning: #8a6500;
+    --color-warning-bg: #fff8df;
+    --color-error: #d2362b;
+    --color-error-bg: #fbeeed;
+    --color-neutral-50: #f2f2f2;
+    --color-neutral-100: #e6e6e6;
+    --color-neutral-200: #ccc;
+    --color-neutral-300: #b3b3b3;
+    --color-neutral-500: #767676;
+    --color-neutral-600: #626264;
+    --color-neutral-700: #4d4d4d;
+    --color-neutral-800: #1a1a1a;
+    --color-neutral-900: #1a1a1a;
+    --color-focus: #68750a;
+    --color-brand: #8f9d11;
+    --color-brand-bright: #d5e732;
+    --color-brand-text: #4b5605;
+    --color-brand-surface: #f2f6c5;
+    --color-brand-border: #68750a;
+    --color-highlight: #e8ef8e;
+    --color-background: #f8f8fb;
+    --color-surface: #fff;
+    --button-primary-bg: #4b5605;
+    --button-primary-text: #fff;
+    --button-primary-hover-bg: #354003;
+    --button-primary-active-bg: #242d02;
+    --button-accent-bg: #d5e732;
+    --button-accent-text: #1a1a1a;
+    --button-accent-hover-bg: #bed21f;
+    --button-accent-active-bg: #a6b918;
+    --button-secondary-bg: #fff;
+    --button-secondary-text: #4b5605;
+    --button-secondary-border: #68750a;
+    --button-secondary-hover-bg: #f2f6c5;
+    --button-secondary-active-bg: #e8ef8e;
+    --button-disabled-bg: #ccc;
+    --button-disabled-text: #4d4d4d;
+    --button-disabled-border: #ccc;
+    --paper: var(--color-surface);
+    --border: #949494;
+    --ink: var(--color-neutral-800);
+    --muted: var(--color-neutral-600);
+}
+
