@@ -13,7 +13,7 @@ export type Messages = Widen<(typeof messages)["ja"]>;
 export const messages = {
   ja: {
     meta: {
-      title: "ねこ背検知 - 猫背みまもり",
+      title: "ねこ背検知 - 猫背監視アプリ",
       description:
         "猫背を音で知らせる完全オンデバイスなWebアプリ。映像は外部に送信せず、端末内だけで姿勢を判定します。",
     },
