@@ -485,6 +485,7 @@ video.display-hidden { opacity: 0; }
 }
 
 @media (max-width: 700px) {
+  html { scrollbar-gutter: auto; }
   body { min-height: 100dvh; overflow-x: hidden; background: var(--color-surface); }
   .desktop-only { display: none !important; }
   .mobile-only { display: initial !important; }
@@ -504,6 +505,7 @@ video.display-hidden { opacity: 0; }
   .camera-placeholder h2 { margin-top: 20px; font-size: 18px; }
   .camera-placeholder p { max-width: 17rem; }
   .cat-orbit { width: 80px; height: 80px; }
+  .camera-cat { width: 70px; height: 70px; }
   .status-pill { top: 10px; left: 10px; padding: 6px 8px; }
   .posture-badge { padding: 4px 8px; }
   .calibration-overlay strong { padding: 0 18px; font-size: 18px; }
