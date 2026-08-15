@@ -8,6 +8,8 @@ const SOUND_CHOICES_KEY = "nekozekenchi:sound-choices";
 const DEFAULT_SOUND_VOLUME = 50;
 const BASE_ALERT_GAIN = 0.22;
 const MAX_ALERT_GAIN = 1;
+const GESTURE_RECOGNIZED_GAIN = 0.16;
+const GESTURE_CONFIRMED_GAIN = 0.24;
 const DEFAULT_SOUND_CHOICE = "tone";
 
 const SOUND_OPTIONS = [
@@ -107,6 +109,18 @@ export function createSoundController(elements: AppElements, getMessages: Messag
     saveSettings();
   }
 
+  function isMuted() {
+    return Number(elements.soundVolume.value) <= 0;
+  }
+
+  function mute() {
+    if (!isMuted()) setVolume(0);
+  }
+
+  function unmute() {
+    if (isMuted()) setVolume(lastAudibleVolume);
+  }
+
   function getSelectedSoundChoices() {
     return Array.from(elements.soundChoices)
       .filter((choice) => choice.checked)
@@ -148,6 +162,55 @@ export function createSoundController(elements: AppElements, getMessages: Messag
     }
 
     playTone(volume);
+  }
+
+  async function playGestureRecognized() {
+    await playGestureTone("recognized");
+  }
+
+  async function playGestureConfirmed(
+    tone: "default" | "shutdown" = "default",
+  ) {
+    await playGestureTone(tone === "shutdown" ? "shutdown" : "confirmed");
+  }
+
+  async function playGestureTone(
+    kind: "recognized" | "confirmed" | "shutdown",
+  ) {
+    const volume = Number(elements.soundVolume.value) / 100;
+    if (volume <= 0) return;
+
+    await unlock();
+    if (!audio) return;
+
+    const oscillator = audio.createOscillator();
+    const gain = audio.createGain();
+    const start = audio.currentTime;
+    const confirmed = kind !== "recognized";
+    const shutdown = kind === "shutdown";
+    const duration = shutdown ? 0.32 : confirmed ? 0.18 : 0.08;
+    const peakGain =
+      (confirmed ? GESTURE_CONFIRMED_GAIN : GESTURE_RECOGNIZED_GAIN) * volume;
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(shutdown ? 880 : confirmed ? 660 : 520, start);
+    if (shutdown) {
+      oscillator.frequency.exponentialRampToValueAtTime(520, start + 0.14);
+      oscillator.frequency.exponentialRampToValueAtTime(220, start + duration);
+    } else if (confirmed) {
+      oscillator.frequency.setValueAtTime(880, start + 0.08);
+    }
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(peakGain, start + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+    oscillator.connect(gain);
+    gain.connect(audio.destination);
+    oscillator.start(start);
+    oscillator.stop(start + duration + 0.01);
+    oscillator.addEventListener("ended", () => {
+      oscillator.disconnect();
+      gain.disconnect();
+    });
   }
 
   function playTone(volume: number) {
@@ -245,8 +308,13 @@ export function createSoundController(elements: AppElements, getMessages: Messag
   return {
     bindControls,
     flashAlert,
+    isMuted,
     loadSettings,
+    mute,
     playAlert,
+    playGestureConfirmed,
+    playGestureRecognized,
+    unmute,
     updateControls,
     unlock,
   };

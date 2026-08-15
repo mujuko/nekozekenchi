@@ -2,7 +2,7 @@
 
 [日本語](README.md)
 
-Nekozekenchi is a web app that uses your webcam and MediaPipe Pose Landmarker to detect slouching based on changes in head position.
+Nekozekenchi is a web app that uses your webcam and MediaPipe Pose Landmarker to detect slouching based on changes in head position. It also supports hands-free controls with MediaPipe Gesture Recognizer.
 
 Camera footage and pose landmarks are processed entirely on your device and are never sent to a server.
 
@@ -16,6 +16,18 @@ Camera footage and pose landmarks are processed entirely on your device and are 
 4. The app alerts you when your posture stays beyond the selected sensitivity threshold for the configured amount of time.
 
 For more reliable detection, avoid camera angles that look sharply up or down at you.
+
+Hold one of the following gestures in front of the camera. The app displays recognition progress before performing the action. Lower your hands after an action before using another gesture.
+
+- Make a T with both hands: pause detection
+- Show a victory sign: resume from pause
+- Show one open palm: stop the camera and detection
+- Put your palms together at chest height: recalibrate
+- Put your index finger to your lips: mute
+- Give a thumbs up: unmute
+
+To prevent accidental actions, hold the open palm for about 1.5 seconds and the other gestures for about one second.
+Short electronic tones play when gesture recognition starts and when the hold completes and the action runs. Only the stop action uses a descending shutdown tone. These tones use the same volume and mute settings as posture alerts.
 
 ### How detection works
 

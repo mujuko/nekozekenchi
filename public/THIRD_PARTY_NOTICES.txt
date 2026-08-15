@@ -34,6 +34,18 @@ Source:
 License:
 - Apache License, Version 2.0
 
+MediaPipe Gesture Recognizer model
+----------------------------------
+
+File:
+- public/mediapipe/models/gesture_recognizer.task
+
+Source:
+- https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/gesture_recognizer.task
+
+License:
+- Apache License, Version 2.0
+
 Pocket Sound effects
 --------------------
 

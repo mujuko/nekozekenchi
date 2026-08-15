@@ -1,19 +1,20 @@
-import type { NormalizedLandmark } from "@mediapipe/tasks-vision";
 import PoseLandmarkerWorker from "../workers/poseLandmarker.worker?worker&inline";
 import type { Messages } from "../i18n";
 import type {
   PoseWorkerRequest,
   PoseWorkerResponse,
+  InferenceResult,
 } from "./poseWorkerMessages";
 import { withTimeout } from "./timeout";
 
 const MODEL_PATH = "mediapipe/models/pose_landmarker_lite.task";
+const GESTURE_MODEL_PATH = "mediapipe/models/gesture_recognizer.task";
 const WASM_PATH = "mediapipe/wasm";
 const STARTUP_TIMEOUT_MS = 30_000;
 
 type PendingDetection = {
   requestId: number;
-  resolve: (landmarks: NormalizedLandmark[] | undefined) => void;
+  resolve: (result: InferenceResult) => void;
   reject: (error: Error) => void;
 };
 
@@ -22,7 +23,8 @@ export type PoseInferenceClient = {
   detectForVideo: (
     frame: ImageBitmap,
     timestamp: number,
-  ) => Promise<NormalizedLandmark[] | undefined>;
+    recognizeGestures: boolean,
+  ) => Promise<InferenceResult>;
 };
 
 export async function createLandmarker(t: Messages): Promise<PoseInferenceClient> {
@@ -58,7 +60,7 @@ export async function createLandmarkerWithWorker(
       if (pendingDetection?.requestId !== message.requestId) return;
       const detection = pendingDetection;
       pendingDetection = null;
-      detection.resolve(message.landmarks);
+      detection.resolve(message.result);
       return;
     }
 
@@ -91,6 +93,7 @@ export async function createLandmarkerWithWorker(
 
   const initializeMessage: PoseWorkerRequest = {
     type: "initialize",
+    gestureModelUrl: resolveAssetUrl(GESTURE_MODEL_PATH),
     modelUrl: resolveAssetUrl(MODEL_PATH),
     wasmUrl: resolveAssetUrl(WASM_PATH),
   };
@@ -115,7 +118,7 @@ export async function createLandmarkerWithWorker(
       worker.terminate();
     },
 
-    detectForVideo(frame, timestamp) {
+    detectForVideo(frame, timestamp, recognizeGestures) {
       if (closed) {
         frame.close();
         return Promise.reject(new Error("Pose inference worker is closed."));
@@ -131,6 +134,7 @@ export async function createLandmarkerWithWorker(
         requestId,
         timestamp,
         frame,
+        recognizeGestures,
       };
 
       return new Promise((resolve, reject) => {

@@ -1,8 +1,20 @@
 import type { NormalizedLandmark } from "@mediapipe/tasks-vision";
 
+export type GestureHand = {
+  landmarks: NormalizedLandmark[];
+  categoryName: string;
+  score: number;
+};
+
+export type InferenceResult = {
+  poseLandmarks: NormalizedLandmark[] | undefined;
+  hands: GestureHand[];
+};
+
 export type PoseWorkerRequest =
   | {
       type: "initialize";
+      gestureModelUrl: string;
       modelUrl: string;
       wasmUrl: string;
     }
@@ -11,6 +23,7 @@ export type PoseWorkerRequest =
       requestId: number;
       timestamp: number;
       frame: ImageBitmap;
+      recognizeGestures: boolean;
     }
   | {
       type: "close";
@@ -23,7 +36,7 @@ export type PoseWorkerResponse =
   | {
       type: "result";
       requestId: number;
-      landmarks: NormalizedLandmark[] | undefined;
+      result: InferenceResult;
     }
   | {
       type: "error";
