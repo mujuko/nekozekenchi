@@ -1,4 +1,3 @@
-import type { PoseLandmarker } from "@mediapipe/tasks-vision";
 import { evaluatePosture, type PostureState } from "../posture";
 import type { AppElements } from "../ui";
 import type { Messages } from "../i18n";
@@ -11,7 +10,10 @@ import {
 import { createCalibrationController } from "./calibration";
 import { createDesktopNotifier } from "./desktopNotification";
 import { createOverlay } from "./overlay";
-import { createLandmarker } from "./poseLandmarker";
+import {
+  createLandmarker,
+  type PoseInferenceClient,
+} from "./poseLandmarker";
 import type { SoundController } from "./sound";
 import type { StatusView } from "./statusView";
 import type { DisplaySettingsController } from "./displaySettings";
@@ -27,12 +29,13 @@ export function createPostureWatcher(
 ) {
   const BACKGROUND_PREDICTION_INTERVAL_MS = 125;
 
-  let poseLandmarker: PoseLandmarker | null = null;
+  let poseLandmarker: PoseInferenceClient | null = null;
   let stream: MediaStream | null = null;
   let animationFrame = 0;
   let backgroundTimer = 0;
   let lastVideoTime = -1;
   let predicting = false;
+  let predictionEpoch = 0;
   let paused = false;
   let postureState: PostureState = createEmptyPostureState();
 
@@ -99,6 +102,7 @@ export function createPostureWatcher(
   }
 
   function stopCamera() {
+    predictionEpoch += 1;
     cancelScheduledPrediction();
     stream?.getTracks().forEach((track) => track.stop());
     stream = null;
@@ -132,6 +136,7 @@ export function createPostureWatcher(
     if (!stream || paused || calibration.isCalibrating()) return;
 
     paused = true;
+    predictionEpoch += 1;
     cancelScheduledPrediction();
     overlay.clear();
     elements.calibrationOverlay.hidden = true;
@@ -164,7 +169,6 @@ export function createPostureWatcher(
     window.clearTimeout(backgroundTimer);
     animationFrame = 0;
     backgroundTimer = 0;
-    predicting = false;
   }
 
   function scheduleNextPrediction() {
@@ -184,6 +188,7 @@ export function createPostureWatcher(
 
   function predict() {
     if (!poseLandmarker || !stream || paused) return;
+    const landmarker = poseLandmarker;
     if (predicting) {
       scheduleNextPrediction();
       return;
@@ -193,53 +198,64 @@ export function createPostureWatcher(
     if (elements.video.currentTime !== lastVideoTime && elements.video.readyState >= 2) {
       lastVideoTime = elements.video.currentTime;
       predicting = true;
-      poseLandmarker.detectForVideo(elements.video, now, (poseResult) => {
-        predicting = false;
-        if (!stream || paused) {
-          overlay.clear();
-          return;
-        }
+      const epoch = predictionEpoch;
+      void createImageBitmap(elements.video)
+        .then((frame) => landmarker.detectForVideo(frame, now))
+        .then((landmarks) => {
+          if (!stream || paused || epoch !== predictionEpoch) {
+            overlay.clear();
+            return;
+          }
 
-        const landmarks = poseResult.landmarks[0];
-        overlay.drawPose(landmarks);
+          overlay.drawPose(landmarks);
 
-        if (!landmarks) {
-          elements.statusLabel.textContent = getMessages().camera.lookingForPerson;
-          statusView.updateStatus("missing", 0, 0);
-          return;
-        }
+          if (!landmarks) {
+            elements.statusLabel.textContent = getMessages().camera.lookingForPerson;
+            statusView.updateStatus("missing", 0, 0);
+            return;
+          }
 
-        const nose = landmarks[0];
-        if (!nose || (nose.visibility ?? 1) < 0.55) {
-          statusView.updateStatus("missing", 0, 0);
-          return;
-        }
+          const nose = landmarks[0];
+          if (!nose || (nose.visibility ?? 1) < 0.55) {
+            statusView.updateStatus("missing", 0, 0);
+            return;
+          }
 
-        if (calibration.isCalibrating()) {
-          calibration.handleSample(nose.y, now);
-          elements.pauseButton.disabled = calibration.isCalibrating();
-          return;
-        }
+          if (calibration.isCalibrating()) {
+            calibration.handleSample(nose.y, now);
+            elements.pauseButton.disabled = calibration.isCalibrating();
+            return;
+          }
 
-        const postureResult = evaluatePosture(nose.y, now, postureState, {
-          threshold: Number(elements.sensitivity.value),
-          warningDurationMs: Number(elements.duration.value),
-          cooldownMs: 12000,
+          const postureResult = evaluatePosture(nose.y, now, postureState, {
+            threshold: Number(elements.sensitivity.value),
+            warningDurationMs: Number(elements.duration.value),
+            cooldownMs: 12000,
+          });
+          postureState = postureResult.state;
+
+          if (postureResult.shouldAlert) {
+            void sound.playAlert();
+            desktopNotifier.notifyBadPosture();
+            sound.flashAlert();
+          }
+
+          statusView.updateStatus(
+            postureResult.isBad ? "bad" : "good",
+            postureResult.score,
+            postureResult.badDurationMs,
+          );
+        })
+        .catch((error) => {
+          if (epoch === predictionEpoch) {
+            console.error("Pose inference failed.", error);
+          }
+        })
+        .finally(() => {
+          predicting = false;
+          if (stream && !paused) scheduleNextPrediction();
         });
-        postureState = postureResult.state;
-
-        if (postureResult.shouldAlert) {
-          void sound.playAlert();
-          desktopNotifier.notifyBadPosture();
-          sound.flashAlert();
-        }
-
-        statusView.updateStatus(
-          postureResult.isBad ? "bad" : "good",
-          postureResult.score,
-          postureResult.badDurationMs,
-        );
-      });
+      return;
     }
 
     scheduleNextPrediction();
