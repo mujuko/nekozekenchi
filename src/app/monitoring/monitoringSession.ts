@@ -27,6 +27,7 @@ import { createGestureCommandController } from "./gestureCommandController";
 import { createPredictionLoop } from "./predictionLoop";
 
 type MessagesProvider = () => Messages;
+type StartupPhase = "idle" | "permission" | "model";
 
 export function createMonitoringSession(
   elements: MonitoringElements,
@@ -39,6 +40,7 @@ export function createMonitoringSession(
   let poseLandmarker: PoseInferenceClient | null = null;
   let stream: MediaStream | null = null;
   let paused = false;
+  let startupPhase: StartupPhase = "idle";
   let postureState: PostureState = createEmptyPostureState();
 
   const overlay = createOverlay(
@@ -90,15 +92,14 @@ export function createMonitoringSession(
     }
 
     elements.startButton.disabled = true;
-    statusView.setStartButtonLabel(startupMessages.camera.waitingPermission);
+    showStartupPhase("permission", startupMessages);
 
     try {
       stream = await getCameraStream(getMessages());
 
       if (!poseLandmarker) {
         const loadingMessages = getMessages();
-        statusView.setStartButtonLabel(loadingMessages.camera.loadingModel);
-        statusView.setCameraMessage(loadingMessages.camera.loadingModelMessage);
+        showStartupPhase("model", loadingMessages);
         poseLandmarker = await createLandmarker(loadingMessages);
       }
 
@@ -111,6 +112,7 @@ export function createMonitoringSession(
       elements.pauseButton.disabled = true;
       updatePauseButton(false);
       elements.calibrateButton.disabled = false;
+      startupPhase = "idle";
       statusView.setStartButtonLabel(getMessages().camera.stop);
       elements.startButton.disabled = false;
       elements.startButton.classList.add("button--stop");
@@ -119,6 +121,7 @@ export function createMonitoringSession(
       calibration.begin();
       predictionLoop.start();
     } catch (error) {
+      startupPhase = "idle";
       stream?.getTracks().forEach((track) => track.stop());
       stream = null;
       console.error(error);
@@ -142,8 +145,8 @@ export function createMonitoringSession(
     elements.pauseButton.disabled = true;
     updatePauseButton(false);
     elements.calibrateButton.disabled = true;
-    statusView.setStartButtonLabel(getMessages().camera.start);
-    statusView.setCameraMessage(getMessages().camera.placeholderCopy);
+    startupPhase = "idle";
+    resetCameraPlaceholder(getMessages());
     elements.startButton.classList.remove("button--stop");
     elements.startButton.onclick = startCamera;
     postureState = createEmptyPostureState();
@@ -242,8 +245,10 @@ export function createMonitoringSession(
 
   function showStartupError(message: string) {
     const t = getMessages();
+    startupPhase = "idle";
     elements.startButton.disabled = false;
     statusView.setStartButtonLabel(t.camera.retry);
+    statusView.setCameraTitle(t.camera.startupError);
     statusView.setCameraMessage(message);
     statusView.setPostureBadge("bad", t.camera.startupError);
   }
@@ -253,7 +258,9 @@ export function createMonitoringSession(
 
     elements.startButton.disabled = true;
     const t = getMessages();
-    statusView.setStartButtonLabel(t.camera.localHostRequired);
+    startupPhase = "idle";
+    statusView.setStartButtonLabel(t.camera.start);
+    statusView.setCameraTitle(t.camera.localHostRequired);
     statusView.setCameraMessage(t.camera.filePreviewOnly);
   }
 
@@ -267,9 +274,30 @@ export function createMonitoringSession(
     } else if (stream) {
       updatePauseButton(paused);
       statusView.setStartButtonLabel(t.camera.stop);
+    } else if (startupPhase !== "idle") {
+      showStartupPhase(startupPhase, t);
     } else if (!elements.startButton.disabled) {
       statusView.setStartButtonLabel(t.camera.start);
     }
+  }
+
+  function showStartupPhase(phase: Exclude<StartupPhase, "idle">, t: Messages) {
+    startupPhase = phase;
+    statusView.setStartButtonLabel(t.camera.start);
+    statusView.setCameraTitle(
+      phase === "permission" ? t.camera.waitingPermission : t.camera.loadingModel,
+    );
+    statusView.setCameraMessage(
+      phase === "permission"
+        ? t.camera.placeholderCopy
+        : t.camera.loadingModelMessage,
+    );
+  }
+
+  function resetCameraPlaceholder(t: Messages) {
+    statusView.setStartButtonLabel(t.camera.start);
+    statusView.setCameraTitle(t.camera.placeholderTitle);
+    statusView.setCameraMessage(t.camera.placeholderCopy);
   }
 
   function beginCalibration() {

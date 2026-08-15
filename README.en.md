@@ -2,7 +2,7 @@
 
 [日本語](README.md)
 
-Nekozekenchi is a web app that uses your webcam and MediaPipe Pose Landmarker to detect slouching based on changes in head position. It also supports hands-free controls with MediaPipe Gesture Recognizer.
+Nekozekenchi is a web app that uses your webcam and MediaPipe Pose Landmarker to detect slouching from changes in head height. It also supports gesture controls powered by MediaPipe Gesture Recognizer.
 
 Camera footage and pose landmarks are processed entirely on your device and are never sent to a server.
 
@@ -13,25 +13,25 @@ Camera footage and pose landmarks are processed entirely on your device and are 
 1. Position your camera at about eye level, far enough away to capture your face and shoulders from the front.
 2. Start the camera and hold good posture for three seconds.
 3. Then hold a slouched posture for three seconds.
-4. The app alerts you when your posture stays beyond the selected sensitivity threshold for the configured amount of time.
+4. The app alerts you when you remain slouched past the selected threshold for the configured amount of time.
 
-For more reliable detection, avoid camera angles that look sharply up or down at you.
+For more reliable detection, avoid steep upward or downward camera angles.
 
 Hold one of the following gestures in front of the camera. The app displays recognition progress before performing the action. Lower your hands after an action before using another gesture.
 
 - Make a T with both hands: pause detection
-- Show a victory sign: resume from pause
+- Show a peace sign: resume from pause
 - Show one open palm: stop the camera and detection
 - Put your palms together at chest height: recalibrate
 - Put your index finger to your lips: mute
 - Give a thumbs up: unmute
 
-To prevent accidental actions, hold the open palm for about 1.5 seconds and the other gestures for about one second.
-Short electronic tones play when gesture recognition starts and when the hold completes and the action runs. Only the stop action uses a descending shutdown tone. These tones use the same volume and mute settings as posture alerts.
+To prevent accidental actions, hold the open-palm gesture for about 1.5 seconds and the other gestures for about one second.
+Short electronic tones play when a gesture is first recognized and again when the action is triggered. Only the stop action uses a descending shutdown tone. These tones use the same volume and mute settings as posture alerts.
 
 ### How detection works
 
-The app uses the head positions recorded for your good and slouched postures as calibration points. It scores your current posture based on how close the Y-coordinate of your nose is to the slouched position. If you remain slouched after an alert, the app can alert you again after a 12-second interval. Recovering your posture clears this cooldown.
+The app uses the head positions recorded for your good and slouched postures as calibration points. It scores your current posture based on how close the Y-coordinate of your nose is to the slouched position. If you remain slouched after an alert, the app can alert you again after a 12-second interval. Returning to an upright posture resets the cooldown.
 
 ## For developers
 
@@ -76,7 +76,7 @@ Opening the generated `dist/index.html` directly in a browser does not provide c
 
 ## Deployment
 
-The app is published through Cloudflare Pages by deploying to Cloudflare Workers from GitHub Actions.
+The app is published with Cloudflare Workers Static Assets and deployed through GitHub Actions.
 
 | Environment | Worker | Automatic deployment trigger | Access |
 | --- | --- | --- | --- |

@@ -10,14 +10,30 @@
         height: 44px;
     }
 
-    @media (max-width: 700px) {
-        &.language-picker--mobile {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            width: 100%;
-            padding: 8px 0 16px;
-        }
+    .language-picker__icon {
+        display: block;
+        flex: 0 0 auto;
+        width: 20px;
+        height: 20px;
+        color: var(--sumizome-100);
+        fill: none;
+        stroke: currentcolor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
+
+    .language-picker__label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
 }
 
 select,
@@ -44,39 +60,10 @@ select,
     }
 }
 
-.source-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: fit-content;
-    min-height: 44px;
-    padding: 6px 12px;
-    color: var(--button-secondary-text) !important;
-    background: var(--button-secondary-bg);
-    border: 1px solid var(--button-secondary-border);
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1;
-    text-decoration: none;
-
-    &:hover {
-        color: var(--button-secondary-text) !important;
-        background: var(--button-secondary-hover-bg);
-        text-decoration: underline;
+.app-header {
+    .language-picker {
+        color: var(--color-text-on-inverted);
     }
-
-    &:active {
-        color: var(--button-secondary-text) !important;
-        background: var(--button-secondary-active-bg);
-    }
-}
-
-.github-icon {
-    width: 22px;
-    height: 22px;
-    fill: currentcolor;
 }
 
 .menu-toggle {
@@ -224,6 +211,23 @@ select,
         }
     }
 
+    &.button--primary.button--stop:not(:disabled) {
+        color: var(--sumizome-0);
+        background: var(--color-error);
+
+        @media (hover: hover) {
+            &:hover {
+                color: var(--sumizome-0);
+                background: var(--color-error-text);
+            }
+        }
+
+        &:active {
+            color: var(--sumizome-0) !important;
+            background: var(--color-error-text) !important;
+        }
+    }
+
     .button__icon {
         flex: 0 0 auto;
         width: 20px;
@@ -260,5 +264,13 @@ select,
             display: none;
         }
     }
+}
+
+.dads-button:disabled,
+.button:disabled {
+    color: var(--button-disabled-text);
+    background: var(--button-disabled-bg);
+    border-color: var(--button-disabled-border);
+    opacity: 1;
 }
 

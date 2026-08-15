@@ -3,8 +3,7 @@
     flex-direction: column;
     gap: 16px;
 
-    .settings-panel__header,
-    .settings-panel__links {
+    .settings-panel__header {
         display: none;
     }
 
@@ -45,42 +44,27 @@
             display: flex !important;
             align-items: center;
             justify-content: space-between;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--color-neutral-200);
+            margin: -16px -16px 4px;
+            padding: 10px 12px 10px 16px;
+            color: var(--color-text-on-inverted);
+            background: var(--color-surface-inverted);
+            border-bottom: 3px solid var(--color-brand);
 
             h2 {
                 margin: 0;
                 font-size: 20px;
                 line-height: 1.5;
             }
-        }
 
-        .settings-panel__links {
-            display: grid !important;
-            gap: 16px;
-            padding: 8px 0 4px;
-            color: var(--color-neutral-600);
-            font-size: 14px;
-            line-height: 1.7;
+            .settings-panel__close {
+                color: var(--color-text-on-inverted);
 
-            a {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-
-                &:first-child {
-                    justify-content: center;
-                    width: 100%;
-                    min-height: 48px;
-                    padding: 0 14px;
-                    color: var(--color-link);
-                    background: var(--color-surface);
-                    border: 1px solid currentcolor;
-                    border-radius: 8px;
-                    font-weight: 700;
+                &:hover {
+                    background: var(--sumizome-800);
                 }
             }
         }
+
     }
 }
 
@@ -102,13 +86,22 @@
     padding: 24px;
     container-type: inline-size;
     background: var(--paper);
-    border: 1px solid var(--border);
+    border: 1px solid var(--sumizome-800);
     border-radius: 8px;
+    box-shadow: 6px 6px 0 var(--sumizome-200);
 
-    > h2 {
-        margin: 0 0 12px;
-        font-size: 20px;
-        line-height: 1.5;
+    .settings__heading {
+        margin: -24px -24px 8px;
+        padding: 21px 24px;
+        color: var(--color-text-on-inverted);
+        background: var(--color-surface-inverted);
+        border-bottom: 3px solid var(--color-brand);
+        border-radius: 7px 7px 0 0;
+
+        .section-label {
+            color: var(--color-accent-on-inverted);
+            font-size: 13px;
+        }
     }
 
     .settings__row {
@@ -141,7 +134,7 @@
         }
     }
 
-    > h2 + .settings__row {
+    > .settings__heading + .settings__row {
         border-top: 0;
     }
 
@@ -149,8 +142,9 @@
         padding: 0;
         border: 0;
         border-radius: 0;
+        box-shadow: none;
 
-        > h2 {
+        .settings__heading {
             display: none;
         }
 
@@ -211,7 +205,7 @@
             &::after {
                 width: 14px;
                 height: 14px;
-                background: #fff;
+                background: var(--sumizome-0);
                 clip-path: path(
                     "M5.6,11.2L12.65,4.15L11.25,2.75L5.6,8.4L2.75,5.55L1.35,6.95L5.6,11.2Z"
                 );
@@ -276,42 +270,21 @@
     }
 }
 
-.tip {
-    display: flex;
-    gap: 12px;
+.gesture-guide--mobile {
+    margin: 0;
     padding: 16px;
-    color: var(--color-neutral-700);
     background: var(--color-information-bg);
+    border-top: 0;
     border-left: 4px solid var(--color-information);
 
-    .tip__icon {
-        display: grid;
-        flex: 0 0 24px;
-        width: 24px;
-        height: 24px;
-        place-items: center;
-        color: #fff;
-        background: var(--color-information);
-        border-radius: 50%;
-        font:
-            700 14px Georgia,
-            serif;
-    }
-
-    p {
-        margin: 0;
-        font-size: 14px;
-        line-height: 1.7;
-    }
-
-    b {
+    strong {
         display: block;
-        color: var(--ink);
-        font-size: 14px;
+        margin-bottom: 8px;
     }
 
-    @media (max-width: 700px) {
-        padding: 14px;
+    ul {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 8px;
     }
 }
 

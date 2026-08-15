@@ -13,8 +13,8 @@ export type DisplayPreferencesStore = {
 const DISPLAY_SETTINGS_KEY = "nekozekenchi:display-settings";
 const DEFAULT_SETTINGS: DisplaySettings = {
   video: true,
-  poseGuide: true,
-  uprightLine: true,
+  poseGuide: false,
+  uprightLine: false,
   slouchLine: true,
 };
 
@@ -29,8 +29,8 @@ export function createDisplayPreferencesStore(): DisplayPreferencesStore {
       ) as Partial<DisplaySettings>;
       return {
         video: parsedSettings.video !== false,
-        poseGuide: parsedSettings.poseGuide !== false,
-        uprightLine: parsedSettings.uprightLine !== false,
+        poseGuide: parsedSettings.poseGuide === true,
+        uprightLine: parsedSettings.uprightLine === true,
         slouchLine: parsedSettings.slouchLine !== false,
       };
     } catch {

@@ -24,7 +24,7 @@ export function getAppElements() {
       gestureFeedback: query<HTMLDivElement>("#gesture-feedback"),
       gestureFeedbackLabel: query<HTMLElement>("#gesture-feedback-label"),
       gestureProgressBar: query<HTMLElement>("#gesture-progress-bar"),
-      gestureGuide: query<HTMLParagraphElement>("#gesture-guide"),
+      gestureGuides: queryAll<HTMLUListElement>("[data-gesture-guide]"),
       catIcons: queryAll<HTMLImageElement>("[data-cat-icon]"),
       postureBadges: queryAll<HTMLDivElement>("[data-posture-badge]"),
       meterFills: queryAll<HTMLDivElement>("[data-meter-fill]"),

@@ -1,37 +1,27 @@
 import type { Locale } from "../../localization/locale";
 import type { Messages } from "../../localization/messages";
 import catRelaxedUrl from "../assets/cat-relaxed.svg";
+import logotypeUrl from "../assets/logotype.svg";
 
 export function renderApp(appVersion: string, t: Messages, locale: Locale) {
   return `
     <main class="app">
       <header class="app-header">
-        <a class="brand" href="#" aria-label="${t.header.homeLabel}">
-          <img class="brand__mark" data-cat-icon src="${catRelaxedUrl}" alt="">
-          <span class="brand__name">${t.common.brand}</span>
-          <span class="brand__version" aria-label="${t.header.versionLabel(appVersion)}">${appVersion}</span>
+        <a class="header-brand" href="#" aria-label="${t.header.homeLabel}">
+          <img class="header-brand__mark" data-cat-icon src="${catRelaxedUrl}" alt="">
+          <span class="header-brand__name">${t.common.brand}</span>
         </a>
-        <div class="app-header__actions desktop-only">
-          ${languageSelect(t, locale, "desktop")}
-          <a class="source-link" href="https://github.com/mujuko/nekozekenchi" target="_blank" rel="noreferrer" aria-label="${t.common.github}" title="${t.common.github}">
-            ${githubIcon()}<span>${t.common.sourceCode}</span>
-          </a>
-        </div>
-        <button class="menu-toggle dads-hamburger-menu-button mobile-only" id="menu-button" type="button" aria-label="${t.header.openMenu}" aria-controls="mobile-menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
+        ${languageSelect(t, locale, "header")}
       </header>
-
-      <section class="hero desktop-only">
-        <div>
-          <h1>${t.hero.titleLine1}<br><em>${t.hero.titleEmphasis}</em></h1>
-        </div>
-        <p class="hero__copy">${t.hero.copy}</p>
-      </section>
-
+      <p class="app-tagline">${t.header.tagline}</p>
       <section class="workspace">
-        <div class="camera">
+        <div class="monitor-column">
+          <div class="camera">
+          <div class="camera__heading"><span class="section-label">01 / MONITOR</span></div>
           <div class="camera__stage" id="camera-stage">
+            <button class="camera__menu-toggle menu-toggle dads-hamburger-menu-button mobile-only" id="menu-button" type="button" aria-label="${t.header.openMenu}" aria-controls="mobile-menu" aria-expanded="false">
+              <span></span><span></span><span></span>
+            </button>
             <video class="camera__video" id="video" playsinline muted></video>
             <canvas class="camera__overlay" id="overlay"></canvas>
             <div class="camera__placeholder" id="camera-placeholder">
@@ -59,8 +49,8 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
           <div class="camera__actions">
             <button class="button button--primary button--start dads-button" data-type="solid-fill" data-size="lg" id="start-button">
               <svg class="button__icon" aria-hidden="true" viewBox="0 0 24 24">
-                <path d="M14.5 4.5 16.2 7H20a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3.8l1.7-2.5h5Z"></path>
-                <circle cx="12" cy="13" r="4"></circle>
+                <rect x="3" y="6" width="13" height="12" rx="2"></rect>
+                <path d="m16 10 5-3v10l-5-3Z"></path>
               </svg>
               <span id="start-button-label">${t.camera.start}</span>
             </button>
@@ -82,7 +72,8 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
               <span id="calibrate-button-label">${t.camera.recalibrate}</span>
             </button>
           </div>
-          <p class="camera__gesture-guide" id="gesture-guide">${t.gesture.guide}</p>
+          </div>
+          ${gestureGuide(t, "desktop")}
         </div>
 
         <div class="drawer-scrim mobile-only" id="menu-scrim" hidden></div>
@@ -91,25 +82,45 @@ export function renderApp(appVersion: string, t: Messages, locale: Locale) {
             <div><h2>${t.settings.menuTitle}</h2></div>
             <button class="settings-panel__close dads-button" data-type="text" data-size="sm" id="close-menu-button" type="button" aria-label="${t.header.closeMenu}">×</button>
           </div>
-          <div class="mobile-only">${languageSelect(t, locale, "mobile")}</div>
           ${settingsPanel(t)}
-          <div class="tip">
-            <span class="tip__icon">i</span>
-            <p><b>${t.tip.title}</b>${t.tip.body}</p>
-          </div>
-          <nav class="settings-panel__links mobile-only" aria-label="${t.common.brand}">
-            <a href="https://github.com/mujuko/nekozekenchi" target="_blank" rel="noreferrer">${githubIcon()}<span>${t.common.sourceCode}</span></a>
-            <a href="https://pocket-se.info/" target="_blank" rel="noreferrer">${t.common.soundCredit}</a>
-            <span>${t.common.copyright}</span>
-          </nav>
+          ${gestureGuide(t, "mobile")}
         </aside>
       </section>
 
-      <footer class="app-footer desktop-only">
-        <span>${t.common.copyright}</span>
-        <a href="https://pocket-se.info/" target="_blank" rel="noreferrer">${t.common.soundCredit}</a>
-      </footer>
     </main>
+    <footer class="app-footer">
+      <div class="app-footer__inner">
+        <div class="app-footer__main">
+          <section class="app-footer__product">
+            <span class="app-footer__label">PRODUCT</span>
+            <div class="app-footer__product-body">
+              <div>
+                <strong class="app-footer__credit">
+                  <span class="app-footer__product-name">${t.common.brand}</span>
+                </strong>
+                <p>${t.footer.summary}</p>
+              </div>
+            </div>
+          </section>
+          <nav class="app-footer__section" aria-label="${t.common.github}">
+            <span class="app-footer__label">PROJECT</span>
+            <a class="app-footer__link app-footer__source-link" href="https://github.com/mujuko/nekozekenchi" target="_blank" rel="noreferrer">
+              ${externalLinkIcon()}<span>${t.common.sourceCode}</span>
+            </a>
+          </nav>
+          <section class="app-footer__section">
+            <span class="app-footer__label">CREDITS</span>
+            <a class="app-footer__link app-footer__sound-credit" href="https://pocket-se.info/" target="_blank" rel="noreferrer">
+              ${externalLinkIcon()}<span>${t.common.soundCredit}</span>
+            </a>
+          </section>
+        </div>
+        <div class="app-footer__bottom">
+          <img class="app-footer__company-logo" src="${logotypeUrl}" alt="${t.common.company}">
+          <span class="app-footer__version" aria-label="${t.header.versionLabel(appVersion)}">${appVersion}</span>
+        </div>
+      </div>
+    </footer>
   `;
 }
 
@@ -127,7 +138,9 @@ function posturePanel(t: Messages) {
 function settingsPanel(t: Messages) {
   return `
     <div class="settings">
-      <h2>${t.settings.panelTitle}</h2>
+      <div class="settings__heading">
+        <span class="section-label">02 / CONTROL</span>
+      </div>
       <label class="settings__row">
         <span><b>${t.settings.sensitivity}</b><small>${t.settings.sensitivityHelp}</small></span>
         <select class="dads-select" id="sensitivity">
@@ -148,8 +161,8 @@ function settingsPanel(t: Messages) {
         <span><b>${t.settings.display}</b><small>${t.settings.displayHelp}</small></span>
         <div class="choice-list choice-list--display" aria-label="${t.settings.displayLabel}">
           <label><input type="checkbox" value="video" data-display-choice checked>${t.settings.showVideo}</label>
-          <label><input type="checkbox" value="poseGuide" data-display-choice checked>${t.settings.showPoseGuide}</label>
-          <label><input type="checkbox" value="uprightLine" data-display-choice checked>${t.settings.showUprightLine}</label>
+          <label><input type="checkbox" value="poseGuide" data-display-choice>${t.settings.showPoseGuide}</label>
+          <label><input type="checkbox" value="uprightLine" data-display-choice>${t.settings.showUprightLine}</label>
           <label><input type="checkbox" value="slouchLine" data-display-choice checked>${t.settings.showSlouchLine}</label>
         </div>
       </div>
@@ -157,11 +170,11 @@ function settingsPanel(t: Messages) {
         <span><b>${t.settings.sound}</b><small>${t.settings.soundHelp}</small></span>
         <div class="sound-settings">
           <div class="choice-list choice-list--sound" aria-label="${t.settings.soundKindLabel}">
-            <label><input type="checkbox" value="tone" data-sound-choice checked>${t.settings.soundTone}</label>
-            <label><input type="checkbox" value="cat10" data-sound-choice>${t.settings.soundCat(1)}</label>
-            <label><input type="checkbox" value="cat11" data-sound-choice>${t.settings.soundCat(2)}</label>
-            <label><input type="checkbox" value="cat15" data-sound-choice>${t.settings.soundCat(3)}</label>
-            <label><input type="checkbox" value="cat30" data-sound-choice>${t.settings.soundCat(4)}</label>
+            <label><input type="checkbox" value="tone" data-sound-choice>${t.settings.soundTone}</label>
+            <label><input type="checkbox" value="cat10" data-sound-choice checked>${t.settings.soundCat(1)}</label>
+            <label><input type="checkbox" value="cat11" data-sound-choice checked>${t.settings.soundCat(2)}</label>
+            <label><input type="checkbox" value="cat15" data-sound-choice checked>${t.settings.soundCat(3)}</label>
+            <label><input type="checkbox" value="cat30" data-sound-choice checked>${t.settings.soundCat(4)}</label>
           </div>
           <div class="sound-settings__volume">
             <button class="sound-settings__button sound-settings__button--mute dads-button" data-type="outline" data-size="sm" id="mute-button" type="button" aria-pressed="false" aria-label="${t.settings.muteLabel}">${t.settings.mute}</button>
@@ -177,8 +190,12 @@ function settingsPanel(t: Messages) {
 function languageSelect(t: Messages, locale: Locale, placement: string) {
   return `
     <label class="language-picker language-picker--${placement}">
-      <span>${t.common.language}</span>
-      <select data-locale-select>
+      <svg class="language-picker__icon" aria-hidden="true" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3Z"></path>
+      </svg>
+      <span class="language-picker__label">${t.common.language}</span>
+      <select data-locale-select aria-label="${t.common.language}">
         <option value="ja"${locale === "ja" ? " selected" : ""}>${t.common.japanese}</option>
         <option value="en"${locale === "en" ? " selected" : ""}>${t.common.english}</option>
       </select>
@@ -186,10 +203,20 @@ function languageSelect(t: Messages, locale: Locale, placement: string) {
   `;
 }
 
-function githubIcon() {
+function gestureGuide(t: Messages, placement: "desktop" | "mobile") {
   return `
-    <svg class="github-icon" aria-hidden="true" viewBox="0 0 24 24">
-      <path d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.07c-3.13.68-3.8-1.34-3.8-1.34-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.68.08-.68 1.13.08 1.73 1.16 1.73 1.16 1 .1 2.64-.89 3.28-.68.1-.73.4-1.23.72-1.52-2.5-.28-5.13-1.25-5.13-5.57 0-1.23.44-2.24 1.16-3.03-.12-.28-.5-1.43.11-2.99 0 0 .95-.3 3.1 1.16a10.7 10.7 0 0 1 5.64 0c2.15-1.46 3.1-1.16 3.1-1.16.61 1.56.23 2.71.11 2.99.72.79 1.16 1.8 1.16 3.03 0 4.33-2.63 5.28-5.14 5.56.41.35.77 1.04.77 2.09v3.1c0 .3.2.65.78.54A11.2 11.2 0 0 0 12 .8Z"></path>
+    <section class="gesture-guide gesture-guide--${placement} ${placement}-only" aria-labelledby="gesture-guide-title-${placement}">
+      <strong id="gesture-guide-title-${placement}" data-gesture-guide-title>${t.gesture.guideTitle}</strong>
+      <ul data-gesture-guide>${t.gesture.guideItems.map((item) => `<li>${item}</li>`).join("")}</ul>
+    </section>
+  `;
+}
+
+function externalLinkIcon() {
+  return `
+    <svg class="external-link-icon" aria-hidden="true" viewBox="0 0 24 24">
+      <path d="M14 4h6v6M20 4l-9 9"></path>
+      <path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"></path>
     </svg>
   `;
 }

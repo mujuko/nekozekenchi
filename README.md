@@ -76,7 +76,7 @@ npm run preview
 
 ## デプロイ
 
-アプリをCloudflare Pagesで公開するため、GitHub ActionsでCloudflare Workersにデプロイします。
+アプリはCloudflare Workers Static Assetsで公開し、GitHub Actionsからデプロイします。
 
 | 環境 | Worker名 | 自動デプロイが実行される条件 | 公開範囲 |
 | --- | --- | --- | --- |
