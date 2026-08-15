@@ -8,14 +8,14 @@ const enIndexPath = resolve(rootDir, "dist/en/index.html");
 
 const ja = {
   lang: "ja",
-  title: "ねこ背検知 - 猫背みまもり",
+  title: "ねこ背検知 - 猫背監視アプリ",
   siteName: "ねこ背検知",
   url: "https://nekoze.mujuko.com/",
   description:
     "猫背を音で知らせる完全オンデバイスなWebアプリ。映像は外部に送信せず、端末内だけで姿勢を判定します。",
   schemaName: "ねこ背検知",
   schemaAlternateName: "Nekozekenchi",
-  noscriptTitle: "ねこ背検知 - 猫背みまもり",
+  noscriptTitle: "ねこ背検知 - 猫背監視アプリ",
   noscriptBody:
     "ねこ背検知は、カメラで姿勢を見守り、猫背が続いたときに音で知らせるWebアプリです。カメラ映像は送信されず、端末内だけで姿勢を判定します。",
 };
