@@ -49,6 +49,8 @@ async function initialize(
   try {
     poseLandmarker?.close();
     gestureRecognizer?.close();
+    // This Worker is emitted as an ES module by Vite. Use MediaPipe's module
+    // WASM loader so its import.meta-based fallback remains valid here.
     const vision = await FilesetResolver.forVisionTasks(wasmUrl, true);
     poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
       baseOptions: {

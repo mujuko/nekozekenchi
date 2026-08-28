@@ -55,6 +55,9 @@ export default defineConfig({
     "import.meta.env.VITE_APP_VERSION": JSON.stringify(getAppVersion()),
   },
   plugins: [viteSingleFile()],
+  worker: {
+    format: "es",
+  },
   server: {
     host: useDevHttps ? "0.0.0.0" : "localhost",
     port: 5187,
